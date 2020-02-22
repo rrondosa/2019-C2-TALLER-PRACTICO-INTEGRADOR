@@ -1,6 +1,6 @@
 Ionic 4 Start Theme (v1.0.0)
 ==========
-**Ionic 4 start theme** experiencing the best of new features about this new and definitive release: Angular 7 + Ionic 4 final. 
+**Ionic 4 :Angular 7 + Ionic 4 final. 
 
 * Angular 7
 * @ionic/angular 4.0.0
@@ -10,7 +10,6 @@ Ionic 4 Start Theme (v1.0.0)
 * 2 Page modals
 * 2 Components
 
----
 
 Requirements
 ------------
