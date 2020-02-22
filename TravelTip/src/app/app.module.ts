@@ -29,8 +29,11 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from "@angular/fire/fi
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
-// 
+// estrellas 
 import { IonicRatingModule } from 'ionic4-rating';
+
+// map cordova
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 @NgModule({
   declarations: [AppComponent, NotificationsComponent],
@@ -54,7 +57,8 @@ import { IonicRatingModule } from 'ionic4-rating';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FirestoreSettingsToken, useValue: {}},
     Geolocation,
-    NativeGeocoder
+    NativeGeocoder,
+    GoogleMaps
   ],
   bootstrap: [AppComponent]
 })

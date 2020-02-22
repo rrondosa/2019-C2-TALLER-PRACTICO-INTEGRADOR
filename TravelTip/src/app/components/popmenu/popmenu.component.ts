@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class PopmenuComponent implements OnInit {
   openMenu: Boolean = false;
-
+  mapaPrueba ="MapaPruebaPage";
   constructor(public navCtrl: NavController,private router: Router) { }
 
   ngOnInit() {

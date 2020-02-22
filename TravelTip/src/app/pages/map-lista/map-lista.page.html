@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mapa-prueba"></ion-back-button>
+     </ion-buttons>
+    <ion-title>
+        <ion-text color="light">
+          <ion-text color="light" class="fw700">Listado Hoteles</ion-text>
+        </ion-text>
+    </ion-title>
+
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+  
+  <ion-slides class="carrusel" pager="true">
+    <ion-slide center *ngFor="let place of places">
+      <ion-card>
+        <ion-img style="height: 300px;" [src]="place.photo"></ion-img>
+        <ion-card-header>
+          <ion-card-subtitle>{{place.direccion}}</ion-card-subtitle>
+          <ion-card-title>{{place.name}}  {{place.distanciaM}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col col-10><div class="rate_div"><rating [rate]="place.rating"  readonly="true" ></rating></div></ion-col>
+            <ion-col col-2>{{place.rating}}</ion-col>
+            
+          </ion-row>
+          <ion-row>
+            <ion-col col-2><ion-icon name="call"></ion-icon></ion-col>
+            <ion-col col-10>{{place.tel}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2><ion-icon name="link"></ion-icon></ion-col>
+            <ion-col col-10><a href="{{place.web}}">Ir su web</a></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2><ion-icon name="navigate"></ion-icon></ion-col>
+            <ion-col col-10><a href="{{place.drive}}">Como llegar ...</a></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-3>
+              <div *ngIf="meGusta; else elseLike">
+                <button ion-button icon-start clear small >
+                  <ion-icon name="thumbs-up"></ion-icon>
+                  <!-- <div>{{cantLike}}</div> -->
+                </button>
+              </div>
+              <ng-template #elseLike>
+                <button ion-button icon-start clear small color="dark" >
+                  <ion-icon name="thumbs-up" color="dark"></ion-icon>
+                  <!-- <div>{{cantLike}}</div> -->
+                </button>
+              </ng-template>
+            </ion-col>
+            <ion-col col-5>
+              <button ion-button icon-start clear small >
+                <ion-icon name="text"></ion-icon>
+                <!-- <div *ngIf="this.cantidad">
+                  {{cantidad}} Comentarios
+                </div> -->
+                Coomentarios
+              </button>
+            </ion-col>
+            <ion-col align-self-center text-center col-4>
+              <!-- <div *ngIf="esFavorito; else elseBlock"> -->
+                <button ion-button icon-start clear small >
+                  <ion-icon name="star"></ion-icon>
+                  <div>Favorito</div>
+                </button>
+              <!-- </div> -->
+              <!-- <ng-template #elseBlock>
+                <button ion-button icon-start clear small color="dark" >
+                  <ion-icon name="star" color="dark"></ion-icon>
+                  <div>Favorito</div>
+                </button>
+              </ng-template> -->
+            </ion-col>
+           
+          </ion-row>
+          
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

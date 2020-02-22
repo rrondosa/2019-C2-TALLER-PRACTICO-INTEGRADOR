@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <!-- <ion-buttons slot="start">
-      <ion-menu-button color="secondary"></ion-menu-button>
-    </ion-buttons> -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home-results"></ion-back-button>
+    </ion-buttons>
     <ion-title>
         <ion-text color="light">
           <ion-text color="light" class="fw700">Transpote</ion-text>
@@ -27,30 +27,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-card no-margin class="no-radius">
-    <ion-item lines="none" color="medium">
-      <ion-label>
-        <h2 no-margin class="fw500 no-margin">
-          <ion-icon name="locate"></ion-icon>
-          <ion-text color="dark">Ubicación</ion-text>
-        </h2>
-
-          <ion-text  color="primary">
-            {{userCity}}
-          </ion-text>
-      
-      </ion-label>
-    </ion-item>
-  </ion-card>
 
   <div #map id="map"></div>
-  <ion-list>
+  
+  <!-- <ion-list>
     <ion-item *ngFor="let place of places">
       <ion-label><p>{{place.name}}</p></ion-label>
       
       <div class="rate_div"><rating [rate]="place.rating"  readonly="true" ></rating></div>
          
     </ion-item>
-  </ion-list>
-
+  </ion-list> -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button routerLink="/map-transporte" routerDirection="root">
+        <ion-icon name="flash"></ion-icon>
+        <ion-label>Tab one</ion-label>
+      </ion-tab-button>
+    
+      <ion-tab-button routerLink="/map-hotel" routerDirection="root">
+        <ion-icon name="flash"></ion-icon>
+        <ion-label>Tab 2</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>
+  
 </ion-content>
