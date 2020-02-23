@@ -3,11 +3,15 @@ export interface Roles{
     admin?: boolean;
 }
 export interface Usuario{
+    id?:string;
     uid?: string;
     nombre?: string;
     apellido?: string;
     email?: string;
     username?: string;
-    imagen?: string;
-    roles: Roles;
+    photoUrl?:string;
+    roles?: Roles;
+    tipoCliente?:number,
+    direccion?:string;
+   
 }

@@ -14,7 +14,7 @@ import { ImagePage } from './../modal/image/image.page';
 import { NotificationsComponent } from './../../components/notifications/notifications.component';
 
 // geolocation
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 
 
@@ -96,13 +96,14 @@ export class HomeResultsPage {
           this.address += value+", ";
         }
         this.address = this.address.slice(0, -2);
+        this.yourLocation = this.address;
       })
       .catch((error: any) =>{ 
         this.address = "Address Not Available!";
       });
 
   }
-  
+
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
   }
@@ -156,6 +157,8 @@ export class HomeResultsPage {
     });
     return await modal.present();
   }
+
+  
 
   async presentImage(image: any) {
     const modal = await this.modalCtrl.create({

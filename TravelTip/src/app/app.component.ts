@@ -8,6 +8,8 @@ import { Pages } from './interfaces/pages';
 
 import { AuthService } from "./servicios/auth.service";
 import { Usuario } from './models/usuario.model';
+import { UserService } from "./servicios/user.service";
+
 
 @Component({
   selector: 'app-root',
@@ -20,81 +22,52 @@ export class AppComponent {
   public isAdmin: any = null;
   public isUser: any = null;
   public userUid: string = null;
-
-  usuario: Usuario =  localStorage.getItem('currentUser') == "undefined" ? null: JSON.parse(localStorage.getItem('currentUser'));
-
+  public userAct: Usuario ={};
+  
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public navCtrl: NavController,
-    public authservice : AuthService
+    public authservice : AuthService,
+    public userService :UserService
   ) {
-    debugger;
-    if(this.usuario!=null){
-      this.authservice.isAuth().subscribe(auth => {
-        if (auth) {
-          this.userUid = auth.uid;
-          this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
-            this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
-            this.isUser = Object.assign({}, userRole.roles).hasOwnProperty('user');
-            // this.isAdmin = true;
-          })
-        }
-      })
-      console.log("isAdmin",this.isAdmin);
-      console.log("isUser",this.isUser);
-      
-      if(this.isAdmin){
-        this.appPages = [
-          {
-            title: 'Home admin',
-            url: '/lista-actividades',
-            direct: 'root',
-            icon: 'home',
-          },
-          {
-            title: 'About',
-            url: '/about',
-            direct: 'forward',
-            icon: 'information-circle-outline'
-          }
-        ];
-      } 
-      if(this.isUser){
-        this.appPages = [
-          {
-            title: 'Home User',
-            url: '/home-results',
-            direct: 'root',
-            icon: 'home',
-          },
-          {
-            title: 'App Settings',
-            url: '/settings',
-            direct: 'forward',
-            icon: 'cog'
-          }
-          ];
-      }
-    }  
     
-      this.appPages = [
+    this.initializeApp();
+    this.getCurrentUser();
+    if(this.userUid){
+      this.userService.getOneUser(this.userUid).subscribe(book => {
+        this.userAct = book;
+      });
+      console.log("user act:",this.userAct);
+      
+    } else console.log("NO SE LOGUEO");
+    
+    
+
+    this.appPages = [
       {
         title: 'Home',
-        url: '/maps',
+        url: '/home-results',
         direct: 'root',
-        icon: 'home',
+        icon: 'home'
       },
       {
         title: 'About',
         url: '/about',
         direct: 'forward',
         icon: 'information-circle-outline'
+      },
+
+      {
+        title: 'App Settings',
+        url: '/settings',
+        direct: 'forward',
+        icon: 'cog'
       }
-      ];
-    
-    this.initializeApp();
+    ];
+
+
   }
 
   initializeApp() {    
@@ -102,6 +75,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     }).catch(() => {});
+    
   }
 
   goToEditProgile() {
@@ -109,9 +83,19 @@ export class AppComponent {
   }
 
   logout() {
-    // this.navCtrl.navigateRoot('/');
+    localStorage.clear();
     this.authservice.logout();
   }
 
+  getCurrentUser() {
+    this.authservice.isAuth().subscribe(auth => {
+      if (auth) {
+        this.userUid = auth.uid;
+        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
+          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+        })
+      }
+    })
+  }
 
 }

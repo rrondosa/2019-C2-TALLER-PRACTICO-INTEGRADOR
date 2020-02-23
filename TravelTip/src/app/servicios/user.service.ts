@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/firestore";
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/firestore";
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
@@ -8,68 +8,63 @@ import { Usuario } from '../models/usuario.model';
   providedIn: 'root'
 })
 export class UserService {
-
-
-  private userCollection: AngularFirestoreCollection<Usuario>;
+  constructor(private afs: AngularFirestore) { }
+  private usersCollection: AngularFirestoreCollection<Usuario>;
   private users: Observable<Usuario[]>;
+  private userDoc: AngularFirestoreDocument<Usuario>;
+  private user: Observable<Usuario>;
+  // public selecteduser: Usuario = {
+  //   id: null
+  // };
 
-  public estaElUsuarioLogueado;  // para saber si el usuario esta logueado
-  public usuarioLogueado: Usuario;   // el usuario que se logueo
-  public usuarioAux : Usuario
-  private userSubject = new BehaviorSubject(this.usuarioAux);
-
-  constructor(db:AngularFirestore) {
-    this.estaElUsuarioLogueado = false; 
-    this.userCollection = db.collection<Usuario>('users');
-    this.users = this.userCollection.snapshotChanges().pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return {id, ...data};
+  getAllusers() {
+    this.usersCollection = this.afs.collection<Usuario>('users');
+    return this.users = this.usersCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Usuario;
+          data.id = action.payload.doc.id;
+          return data;
         });
-      })
-    );  
+      }));
   }
 
-  getUsers(){
-    return this.users;
-    
+
+  // getAllUsersOffers() {
+  //   this.usersCollection = this.afs.collection('users', ref => ref.where('oferta', '==', '1'));
+  //   return this.users = this.usersCollection.snapshotChanges()
+  //     .pipe(map(changes => {
+  //       return changes.map(action => {
+  //         const data = action.payload.doc.data() as Usuario;
+  //         data.id = action.payload.doc.id;
+  //         return data;
+  //       });
+  //     }));
+  // }
+
+  getOneUser(iduser: string) {
+    this.userDoc = this.afs.doc<Usuario>(`users/${iduser}`);
+    return this.user = this.userDoc.snapshotChanges().pipe(map(action => {
+      if (action.payload.exists === false) {
+        return null;
+      } else {
+        const data = action.payload.data() as Usuario;
+        data.id = action.payload.id;
+        return data;
+      }
+    }));
   }
 
-  getUser(id: string){
-    debugger;
-    return this.userCollection.doc<Usuario>(id).valueChanges();
+  addUser(user: Usuario): void {
+    this.usersCollection.add(user);
   }
-
-  updateUser(user:Usuario, id: string){
-    return this.userCollection.doc(id).update(user);
+  updateUser(user: Usuario): void {
+    let iduser = user.id;
+    this.userDoc = this.afs.doc<Usuario>(`users/${iduser}`);
+    this.userDoc.update(user);
   }
-  
-  addUser(User: Usuario){
-    return this.userCollection.add(User);
-  }
-  
-  removeUser(id: string){
-    return this.userCollection.doc(id).delete();
-  }
-
-  // seteamos el usuario como logueado, añadiendolo al localStorage
-  setearUsuarioLogueado(usuario: Usuario) {
-    this.estaElUsuarioLogueado = true;
-    this.usuarioLogueado = usuario;
-    localStorage.setItem('currentUser', JSON.stringify(usuario));
-    this.userSubject.next(this.usuarioLogueado);
-  }
-
-  // Lo demas componentes se ponen a la esucha de cambio
-  // a través de esté método
-  getUserObservable(): Observable<Usuario> {
-    return this.userSubject.asObservable();
-  }
-
-  // obtenemos datos del usuario logueado, en localStorage
-  obtenerUsuarioLogueado() {
-  	return JSON.parse(localStorage.getItem('currentUser'));
+  deleteUser(iduser: string): void {
+    this.userDoc = this.afs.doc<Usuario>(`users/${iduser}`);
+    this.userDoc.delete();
   }
 }

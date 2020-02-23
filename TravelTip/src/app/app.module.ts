@@ -24,6 +24,8 @@ import {firebaseConfig } from '../environments/environment';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule, FirestoreSettingsToken } from "@angular/fire/firestore";
+import { AngularFireStorage } from '@angular/fire/storage';
+
 
 // geolocalizacion
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -58,7 +60,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     { provide: FirestoreSettingsToken, useValue: {}},
     Geolocation,
     NativeGeocoder,
-    GoogleMaps
+    GoogleMaps,
+    AngularFireStorage
   ],
   bootstrap: [AppComponent]
 })

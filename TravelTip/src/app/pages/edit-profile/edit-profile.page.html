@@ -9,18 +9,33 @@
 
 <ion-content class="profile">
   <ion-card no-margin>
+    <!-- <form novalidate (ngSubmit)="sendData()" [formGroup]="signupform"> -->
     <ion-card-content class="bg-profile">
       <!-- <img src="assets/img/avatar.png"> -->
-      <ion-icon name="contact"></ion-icon>
-      <h1 class="fw500">Juan Perez</h1>
-      <h2 color="light" margin-bottom>Customer</h2>
-      <ion-button icon-left color="secondary">
+      <!-- <ion-icon name="contact"></ion-icon> -->
+      
+      <ion-card class="cardClass image-upload">
+        <label for="file-input">
+          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}">
+          <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
+          <!-- <img src="assets/img/avatar.png"> -->
+        </label>
+        <input id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
+      </ion-card>
+      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
+      
+      <h1 class="fw500">{{userAct.nombre}} {{userAct.apellido}}</h1>
+      <h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2>
+      
+      <ion-button icon-left color="secondary" (change)="onFileChanged($event)" >
         <ion-icon name="photos"></ion-icon> 
         Editar / + Avatar
       </ion-button>
+    
     </ion-card-content>
   
     <ion-grid fixed no-padding>
+      
       <ion-row>
         <ion-col size="12" padding>
 
@@ -30,26 +45,31 @@
             </ion-list-header>
 
             <ion-item>
-              <ion-label color="dark" position="stacked">Full Name:</ion-label>
-              <ion-input inputmode="text" placeholder="Ex..: Joe Doe" value="João Firmino"></ion-input>
+              <ion-label color="dark" position="stacked">Nombre:</ion-label>
+              <ion-input inputmode="text" placeholder="Ej..: Juan" value={{userAct.nombre}}  [(ngModel)]="userAct.nombre"></ion-input>
+            </ion-item>
+        
+            <ion-item>
+              <ion-label color="dark" position="stacked">Apellido:</ion-label>
+              <ion-input inputmode="text" placeholder="Ej..: López" value={{userAct.apellido}}  [(ngModel)]="userAct.apellido"></ion-input>
             </ion-item>
     
             <ion-item>
               <ion-label color="dark" position="stacked">Email:</ion-label>
-              <ion-input inputmode="email" placeholder="Ex.: joe@doe.com" value="firminoata@gmail.com"></ion-input>
+              <ion-input inputmode="email" placeholder="Ej.: juan@email.com" value={{userAct.email}}  [(ngModel)]="userAct.email"></ion-input>
             </ion-item>
     
             <ion-item>
-              <ion-label color="dark" position="stacked">Address:</ion-label>
-              <ion-input inputmode="text" placeholder="Ex.: Abey Road 5"></ion-input>
+              <ion-label color="dark" position="stacked">Dirección:</ion-label>
+              <ion-input inputmode="text" placeholder="Ej.: Calle 435, cuidad " value={{userAct.direccion}}  [(ngModel)]="userAct.direccion"></ion-input>
             </ion-item>
     
             <ion-item>
-              <ion-label color="dark">City</ion-label>
+              <ion-label color="dark">Cuidad</ion-label>
               <ion-select>
-                <ion-select-option value="nes">New York</ion-select-option>
-                <ion-select-option value="n64">Los Angeles</ion-select-option>
-                <ion-select-option value="ps">London</ion-select-option>
+                <ion-select-option value="nes">Buenos Aires</ion-select-option>
+                <ion-select-option value="n64">Corrientes</ion-select-option>
+                <ion-select-option value="ps">La Paz</ion-select-option>
                 <ion-select-option value="genesis">Paris</ion-select-option>
                 <ion-select-option value="saturn">São Paulo</ion-select-option>
                 <ion-select-option value="snes">Tokyo</ion-select-option>
@@ -58,7 +78,7 @@
             </ion-item>
     
             <ion-item>
-              <ion-label color="dark">State</ion-label>
+              <ion-label color="dark">Pais</ion-label>
               <ion-select>
                 <ion-select-option value="nes">NY</ion-select-option>
                 <ion-select-option value="n64">CA</ion-select-option>
@@ -78,33 +98,35 @@
               </ion-list-header>
           
               <ion-item>
-                <ion-label color="primary">Customer</ion-label>
+                <ion-label color="primary">Cliente</ion-label>
                 <ion-radio slot="start" value="customer" checked></ion-radio>
               </ion-item>
           
               <ion-item>
-                <ion-label color="primary">Owner</ion-label>
+                <ion-label color="primary">Empresa</ion-label>
                 <ion-radio slot="start" value="agent"></ion-radio>
               </ion-item>
             </ion-radio-group>
 
-            <ion-item>
+            <!-- <ion-item>
               <ion-label class="text-1x">Checkbox test</ion-label>
               <ion-checkbox></ion-checkbox>
-            </ion-item>
+            </ion-item> -->
           </ion-list>
   
         </ion-col>
       </ion-row>
     </ion-grid>
   
-    <ion-button size="large" expand="full" color="dark" (click)="sendData()" no-margin>Edit</ion-button>
+    <ion-button size="large" expand="full" color="dark" (click)="sendData()"  no-margin>Editar</ion-button>
+    <!-- <ion-button size="large" expand="full" color="dark"  type="submit" no-margin>Editar</ion-button> -->
+    <!-- </form> -->
   </ion-card>
   
-  <div padding>
+  <!-- <div padding>
     <ion-text color="dark" no-margin>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum odio placeat incidunt nesciunt atque ratione quisquam, fugit
       omnis maxime adipisci excepturi dignissimos aliquam asperiores itaque unde sequi? Minus, quia, dolore?
     </ion-text>
-  </div>
+  </div> -->
 </ion-content>

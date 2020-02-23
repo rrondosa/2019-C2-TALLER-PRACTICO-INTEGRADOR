@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -12,8 +12,10 @@ export class SearchFilterPage implements OnInit {
     upper: 500,
     lower: 10
   };
-
-  constructor(private modalCtrl: ModalController) { }
+ 
+  constructor(private modalCtrl: ModalController,
+    private ngZone: NgZone
+  ) { }
 
   ngOnInit() {
   }

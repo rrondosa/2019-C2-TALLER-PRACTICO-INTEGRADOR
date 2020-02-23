@@ -4,6 +4,28 @@
   }
 }
 
+.image-upload > input
+  {
+      display: none;
+  }
+  
+  .image-upload img
+  {
+      width: 80px;
+      cursor: pointer;
+  }
+
+  .cardClass img {
+    margin: 0 auto;
+    width: 360px;
+    height: 360px;
+    object-fit: cover;
+  }
+
+  .pieDeImagen{
+    color: silver;
+  }
+
 .profile {
   ion-card {
     width: 100%;

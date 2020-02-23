@@ -5,7 +5,7 @@ import { NavController, MenuController, ToastController, AlertController, Loadin
 import { AuthService } from "../../servicios/auth.service";
 import { UserService } from "../../servicios/user.service";
 import { Usuario } from '../../models/usuario.model';
-import { NgStyle } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ export class LoginPage implements OnInit {
   public userUid: string = null;
   loading: any;
   toast:any;
-  user1:Usuario=null;
+  public user: Usuario = {};
 
   constructor(
     public navCtrl: NavController,
@@ -54,8 +54,8 @@ export class LoginPage implements OnInit {
 
   async forgotPass() {
     const alert = await this.alertCtrl.create({
-      header: 'Forgot Password?',
-      message: 'Enter you email address to send a reset link password.',
+      header: '¿Se te olvidó tu contraseña?',
+      message: 'Ingrese su email para enviar una contraseña para restablecer.',
       inputs: [
         {
           name: 'email',
@@ -65,14 +65,14 @@ export class LoginPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
+            console.log('Confirma Cancelacion');
           }
         }, {
-          text: 'Confirm',
+          text: 'Confirmar',
           handler: async () => {
             const loader = await this.loadingCtrl.create({
               duration: 2000
@@ -82,7 +82,7 @@ export class LoginPage implements OnInit {
             loader.onWillDismiss().then(async l => {
               const toast = await this.toastCtrl.create({
                 showCloseButton: true,
-                message: 'Email was sended successfully.',
+                message: 'Se envió correctamente email.',
                 duration: 3000,
                 position: 'bottom'
               });
@@ -102,42 +102,23 @@ export class LoginPage implements OnInit {
     this.navCtrl.navigateRoot('/register');
   }
 
-  goToHome() {
-    this.navCtrl.navigateRoot('/home-results');
-  }
-
-  onSubmitLogin(){
+  async onSubmitLogin(){
     
-    this.authService.login(this.email, this.password).then( res => {
-      debugger;
-      // this.getCurrentUser();
+    this.authService.login(this.email, this.password).then( (res) => {
       
-      this.authService.isAuth().subscribe(auth => {
-        if (auth) {
-          this.userUid = auth.uid;
-          this.authService.isUserAdmin(this.userUid).subscribe(userRole => {
-            this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
-            this.isUser = Object.assign({}, userRole.roles).hasOwnProperty('user');
-            // this.isAdmin = true;
-          })
-          this.usuarioService.getUser(this.userUid).subscribe(data =>{
-            this.user1 = data;
-          })
-          this.usuarioService.setearUsuarioLogueado(this.user1);
-        }
-        
-        this.presentToast("BIENVENIDO: " + this.user1.nombre + " " + this.user1.apellido);
-      })
-      
-      if(this.isAdmin)
-        this.navCtrl.navigateRoot('/lista-actividades');  
-      else this.navCtrl.navigateRoot('/home-results');  
+      this.presentToast("BIENVENID@!" );
+      this.navCtrl.navigateRoot('/home-results');
     }).catch(err => {
-      // alert('Los datos son incorrectos')
       console.error(err);
       this.presentToast("USUARIO INCORRECTO");
     })
   }
+
+  goToHome() {
+    this.getCurrentUser();
+    this.navCtrl.navigateRoot('/home-results');
+  }
+
   async presentToast(msj: string) {
     const toast = await this.toastCtrl.create({
       message: msj,
@@ -154,8 +135,6 @@ export class LoginPage implements OnInit {
         this.userUid = auth.uid;
         this.authService.isUserAdmin(this.userUid).subscribe(userRole => {
           this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
-          this.isUser = Object.assign({}, userRole.roles).hasOwnProperty('user');
-          // this.isAdmin = true;
         })
       }
     })

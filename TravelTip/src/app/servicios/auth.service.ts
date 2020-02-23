@@ -15,11 +15,10 @@ export class AuthService {
   constructor(private AFauth : AngularFireAuth, private router : Router, private db : AngularFirestore) { }
 
   login(email:string, password:string){
-    return new Promise((resolve, rejected) =>{
-      this.AFauth.auth.signInWithEmailAndPassword(email, password).then(user => {
-        console.log(user);
-        resolve(user) 
-      }).catch(err => rejected(err));
+    return new Promise((resolve, reject) =>{
+      this.AFauth.auth.signInWithEmailAndPassword(email, password)
+        .then( user => resolve(user),
+        err => reject(err));
     });
   }
 
@@ -46,6 +45,10 @@ export class AuthService {
     return this.AFauth.authState.pipe(map(auth => auth));
   }
 
+  authCurrent() {
+    return this.AFauth.auth.currentUser;
+  }
+
   private updateUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.db.doc(`users/${user.uid}`);
     const data: Usuario = {
@@ -64,7 +67,7 @@ export class AuthService {
 
   logout(){
     this.AFauth.auth.signOut().then(() => {
-      localStorage.clear();
+      
       this.router.navigate(['/']);
     })
   }
