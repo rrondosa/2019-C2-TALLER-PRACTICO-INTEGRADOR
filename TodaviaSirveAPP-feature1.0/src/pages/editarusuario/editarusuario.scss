@@ -1,0 +1,40 @@
+page-editarusuario {
+
+  .image-upload > input
+  {
+      display: none;
+  }
+  
+  .image-upload img
+  {
+      width: 80px;
+      cursor: pointer;
+  }
+
+  .cardClass img {
+    margin: 0 auto;
+    width: 360px;
+    height: 360px;
+    object-fit: cover;
+  }
+
+  .pieDeImagen{
+    color: silver;
+  }
+
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+  }
+  
+  .error1 {
+    color: rgb(75, 75, 75);
+    border-bottom: 1px solid #ff0000;
+  }
+
+  .item-inner {
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+}
+
+}

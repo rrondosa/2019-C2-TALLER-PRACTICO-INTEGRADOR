@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Subi tu idea</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+    <form novalidate (ngSubmit)="submitPublicacion()">
+
+      <ion-card class="cardClass image-upload">
+        <label for="file-input">
+          <img *ngIf="!img" src="../../assets/imgs/subidaImagen.png" />
+          <img *ngIf="img" [src]="img" />
+        </label>
+        <input id="file-input" type="file" accept="image/*" (change)="cargaArchivo($event)" />
+      </ion-card>
+      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
+
+      <ion-item>
+        <ion-label floating>Titulo de la tranformacion </ion-label>
+        <ion-input type="text" [(ngModel)]="publicacion.titulo" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Una corta descripcion </ion-label>
+        <ion-input type="text" [(ngModel)]="publicacion.subtitulo" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+
+      <!--      <ion-item>
+        <ion-label floating>Descripcion</ion-label>
+        <ion-input type="text" [(ngModel)]="publicacion.descripcion" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item> -->
+
+      <!--      <ion-item>
+        <ion-label floating>Fecha de subida</ion-label> -->
+      <!-- <ion-input type="text" [(ngModel)]="publicacion.fechaSubida" [ngModelOptions]="{standalone: true}"></ion-input> -->
+      <!--         <ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="publicacion.fechaSubida" [ngModelOptions]="{standalone: true}"></ion-datetime>
+      </ion-item> -->
+
+
+      <br /><br />
+      <div style="text-align: center;">
+        <button type="submit" ion-button round color="verdeTodavia">
+          Siguiente &nbsp;
+          <ion-icon name="play"></ion-icon>
+        </button>
+      </div>
+
+    </form>
+  </ion-list>
+
+</ion-content>

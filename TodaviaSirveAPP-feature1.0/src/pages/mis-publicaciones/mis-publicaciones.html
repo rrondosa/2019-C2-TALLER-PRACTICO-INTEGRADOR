@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <ion-title>Mis Publicaciones</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <!-- <p text-center style="color:silver; margin: 5px 0 0 0;"> &lt; Deslice hacia los costados &gt;</p> -->
+  <h5 text-center style="color:slategray; margin: 5px 0 0 0;"> &lt; Deslice hacia los costados &gt;</h5>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let publicacion of publicaciones" #slidingItem>
+
+      <ion-item (click)="irADetalle(publicacion)" text-wrap>
+        <ion-thumbnail item-start class="itemClass">
+          <img src="{{imagesPath}}{{publicacion.imagenPortada}}">
+        </ion-thumbnail>
+        <h2>{{publicacion.titulo}}</h2>
+        <p>{{publicacion.subtitulo}}</p>
+      </ion-item>
+
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="mostrarConfirmacion(publicacion.id, slidingItem)">
+          <ion-icon name="trash"></ion-icon>
+          Eliminar
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+        <button ion-button color="primary" (click)="irAEditarPublicacion(publicacion, slidingItem)">
+          <ion-icon name="paper"></ion-icon>
+          Public.
+        </button>
+        <button ion-button color="secondary" (click)="irAPasosDePublicacion(publicacion, slidingItem)">
+          <ion-icon name="photos"></ion-icon>
+          Pasos
+        </button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+  </ion-list>
+
+  <div text-center padding-bottom>
+    <button ion-button round color="verdeTodavia" (click)="irAPublicar()">Agregar publicacion</button>
+  </div>
+
+
+</ion-content>

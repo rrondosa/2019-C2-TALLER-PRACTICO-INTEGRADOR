@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <ion-title>Mis Favoritos</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list text-wrap>
+    <button ion-item *ngFor="let publicacion of publicaciones" (click)="irADetalle(publicacion)">
+      <ion-avatar item-start>
+        <img src="{{prefixURL}}{{publicacion.imagenPortada}}">
+      </ion-avatar>
+      <h2>{{publicacion.titulo}}</h2>
+      <p>{{publicacion.subtitulo}}</p>
+    </button>
+  </ion-list>
+
+</ion-content>

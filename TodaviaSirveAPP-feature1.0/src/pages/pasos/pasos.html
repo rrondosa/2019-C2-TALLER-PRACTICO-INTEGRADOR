@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Pasos a seguir</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+    <form novalidate (ngSubmit)="submitPaso()">
+
+      <ion-card class="cardClass image-upload">
+        <label for="{{nombreIncremento}}">
+          <img *ngIf="!img" src="../../assets/imgs/subidaImagen.png">
+          <img *ngIf="img" [src]="img" />
+        </label> 
+        <input id="{{nombreIncremento}}" type="file" accept="image/*" (change)="onFileChanged($event)" />
+      </ion-card>
+      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
+
+<!-- 
+      <ion-item>
+        <p>Imagen: </p>
+        <input type="file" accept="image/*" (change)="onFileChanged($event)" />
+      </ion-item>
+
+      <img *ngIf="img" [src]="img" />
+
+ -->
+      <!-- <ion-item>
+        <ion-label>Paso N°:</ion-label>
+        <ion-select [(ngModel)]="paso.numero" [ngModelOptions]="{standalone: true}">
+          <ion-option value="1">1</ion-option>
+          <ion-option value="2">2</ion-option>
+          <ion-option value="3">3</ion-option>
+          <ion-option value="4">4</ion-option>
+          <ion-option value="5">5</ion-option>
+          <ion-option value="6">6</ion-option>
+          <ion-option value="7">7</ion-option>
+          <ion-option value="8">8</ion-option>
+          <ion-option value="9">9</ion-option>
+        </ion-select>
+      </ion-item> -->
+
+
+      <ion-item>
+        <ion-textarea placeholder="Describa el paso" rows="5" type="text" [(ngModel)]="paso.descripcion"
+          [ngModelOptions]="{standalone: true}">
+        </ion-textarea>
+      </ion-item>
+
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <div style="text-align: center;">
+              <button type="submit" ion-button round color="verdeTodavia">Cargar paso</button>
+            </div>
+          </ion-col>
+          <ion-col col-6>
+            <div style="text-align: center;">
+              <a ion-button round color="danger" (click)="irAHome()">Finalizar</a>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </form>
+  </ion-list>
+
+</ion-content>

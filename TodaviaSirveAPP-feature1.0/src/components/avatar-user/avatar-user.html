@@ -1,0 +1,8 @@
+<div *ngIf="usuarioLog">
+  <ion-item no-lines style="background: none; color: white;">
+    <ion-avatar item-start>
+      <img src="{{imagesURL}}{{usuarioLog.imagen}}">
+    </ion-avatar>
+    <h2>Hola! {{usuarioLog.nombre}}</h2>
+  </ion-item>
+</div>

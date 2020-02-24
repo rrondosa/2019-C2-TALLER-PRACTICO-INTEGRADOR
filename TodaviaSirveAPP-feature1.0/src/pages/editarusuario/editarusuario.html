@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <ion-title>Editar Cuenta</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding style="text-align: center">
+
+  <ion-list>
+
+    <form novalidate (ngSubmit)="editarUsuario()" [formGroup]="signupform">
+
+      <ion-card class="cardClass image-upload">
+        <label for="file-input">
+          <img *ngIf="!img" src="{{pathImages}}{{usuario.imagen}}">
+          <img *ngIf="img" [src]="img" />
+        </label>
+        <input id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)" />
+      </ion-card>
+      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
+
+      <ion-item>
+        <ion-label>Nombre: </ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.nombre" formControlName="nombre" value="{{usuario.nombre}}"
+          [class.error1]="!signupform.controls.nombre.valid && signupform.controls.nombre.dirty"></ion-input>
+      </ion-item>
+
+      <ion-item no-lines
+        *ngIf="( signupform.get('nombre').hasError('minlength') || signupform.get('nombre').hasError('maxlength') ||signupform.get('nombre').hasError('pattern') ||signupform.get('nombre').hasError('required') ) && signupform.get('nombre').touched">
+        <div class="error" *ngIf="signupform.get('nombre').hasError('required') && signupform.get('nombre').touched">
+          Ingrese su nombre
+        </div>
+        <div class="error" *ngIf="signupform.get('nombre').hasError('minlength') && signupform.get('nombre').touched">
+          Minimo 4 caracteres
+        </div>
+        <div class="error" *ngIf="signupform.get('nombre').hasError('maxlength') && signupform.get('nombre').touched">
+          Maximo 30 caracteres
+        </div>
+        <div class="error" *ngIf="signupform.get('nombre').hasError('pattern') && signupform.get('nombre').touched">
+          Solo use caracteres del alfabeto
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Apellido </ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.apellido" formControlName="apellido" value="{{usuario.apellido}}"
+          [class.error1]="!signupform.controls.apellido.valid && signupform.controls.apellido.dirty"></ion-input>
+      </ion-item>
+
+      <ion-item no-lines
+        *ngIf="( signupform.get('apellido').hasError('minlength') || signupform.get('apellido').hasError('maxlength') ||signupform.get('apellido').hasError('pattern') ||signupform.get('apellido').hasError('required') ) && signupform.get('apellido').touched">
+        <div class="error"
+          *ngIf="signupform.get('apellido').hasError('required') && signupform.get('apellido').touched">
+          Ingrese su apellido
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('apellido').hasError('minlength') && signupform.get('apellido').touched">
+          Minimo 4 caracteres
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('apellido').hasError('maxlength') && signupform.get('apellido').touched">
+          Maximo 30 caracteres
+        </div>
+        <div class="error" *ngIf="signupform.get('apellido').hasError('pattern') && signupform.get('apellido').touched">
+          Solo use caracteres del alfabeto
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.email" formControlName="email" value="{{usuario.email}}"
+          [class.error1]="!signupform.controls.email.valid && signupform.controls.email.dirty"></ion-input>
+      </ion-item>
+      <ion-item no-lines
+        *ngIf="( signupform.get('email').hasError('minlength') || signupform.get('email').hasError('pattern') ||signupform.get('email').hasError('required') ) && signupform.get('email').touched">
+        <div class="error" *ngIf="signupform.get('email').hasError('required') && signupform.get('email').touched">
+          Introduzca su Email
+        </div>
+        <div class="error" *ngIf="signupform.get('email').hasError('pattern') && signupform.get('email').touched">
+          Direccion de Email invalida
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Username</ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.username" formControlName="username" value="{{usuario.username}}"
+          [class.error1]="!signupform.controls.username.valid && signupform.controls.username.dirty"></ion-input>
+      </ion-item>
+
+      <ion-item no-lines
+        *ngIf="( signupform.get('username').hasError('minlength') || signupform.get('username').hasError('maxlength') ||signupform.get('username').hasError('pattern') ||signupform.get('username').hasError('required') ) && signupform.get('username').touched">
+        <div class="error"
+          *ngIf="signupform.get('username').hasError('required') && signupform.get('username').touched">
+          Introduzca su nombre de usuario
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('username').hasError('minlength') && signupform.get('username').touched">
+          Minimo 4 caracteres
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('username').hasError('maxlength') && signupform.get('username').touched">
+          Maximo 10 caracteres
+        </div>
+        <div class="error" *ngIf="signupform.get('username').hasError('pattern') && signupform.get('username').touched">
+          Solo use caracteres del alfabeto
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="usuario.pass" formControlName="password" value="{{usuario.pass}}"
+          [class.error1]="!signupform.controls.password.valid && signupform.controls.password.dirty"></ion-input>
+      </ion-item>
+
+      <ion-item no-lines
+        *ngIf="( signupform.get('password').hasError('minlength') || signupform.get('password').hasError('maxlength') ||signupform.get('password').hasError('required') ) && signupform.get('password').touched">
+        <div class="error"
+          *ngIf="signupform.get('password').hasError('required') && signupform.get('password').touched">
+          Introduzca su contraseña
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('password').hasError('minlength') && signupform.get('password').touched">
+          Minimo 6 caracteres
+        </div>
+        <div class="error"
+          *ngIf="signupform.get('password').hasError('maxlength') && signupform.get('password').touched">
+          Maximo 12 caracteres
+        </div>
+      </ion-item>
+
+      <br /><br />
+      <div style="text-align: center;">
+        <button type="submit" ion-button round color="verdeTodavia" [disabled]="signupform.invalid">Editar</button>
+      </div>
+
+    </form>
+  </ion-list>
+
+
+</ion-content>

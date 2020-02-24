@@ -1,0 +1,63 @@
+page-detalle {
+
+    .imgCarrusel{
+        height: 320px;
+        width: auto;
+        margin: 0 auto;
+    }
+
+    .botonMasIdeas{
+        padding: 10px;
+        height: 65px;
+    }
+
+    .grid{
+        text-align: center;
+    }
+
+    .linkVideoAPI {
+        text-decoration: none;
+    }
+
+    .item ion-thumbnail {
+        min-height: 50px;
+        width: auto;    
+        img {
+            height: 50px;
+            width: auto;
+        }
+    }
+
+    div.swiper-pagination {
+        top: 10px;
+        bottom: inherit;
+     }
+
+     .swiper-pagination-bullet{
+        background: white;
+    }
+
+    .imagenComentario img {
+        object-fit: cover;
+
+    }
+
+
+    .item-inner {
+        border-bottom-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .botonComentar{
+        padding-bottom: 10px;
+    }
+
+    .inputComentarAqui{
+        padding-top: 15px;
+
+        ion-input.input ::placeholder{
+            font-style: italic;
+        }
+    }
+
+}

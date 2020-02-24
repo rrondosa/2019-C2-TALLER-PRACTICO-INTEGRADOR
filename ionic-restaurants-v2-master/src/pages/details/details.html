@@ -1,0 +1,41 @@
+<!--
+  Generated template for the Details page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="ionic">
+    <ion-title>{{restaurant.shortname}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="info">
+    <h2>{{restaurant.name}}</h2>
+    <p>
+      <ion-icon name="star" *ngFor="let star of stars; let i=index" [ngClass]="{'active': isActive(i)}"></ion-icon>
+      {{restaurant.reviewCount}} Reviews
+    </p>
+    <p>{{restaurant.address}}, {{restaurant.city}}</p>
+    <p>{{restaurant.categories}}</p>
+  </div>
+  
+  <div class="photos">
+    <h3>Pictures</h3>
+    <ion-scroll scrollX="true">
+      <img [src]="photo.thumbnail" *ngFor="let photo of restaurant.photos; let i=index" tappable (click)="showImage(restaurant.name, restaurant.photos, i)">
+    </ion-scroll>
+  </div>
+  
+  <div class="reviews">
+    <h3>Reviews</h3>
+    <p *ngIf="restaurant.reviews.length==0">No reviews yet =(</p>
+    <div *ngIf="restaurant.reviews.length>0">
+      <review *ngFor="let review of restaurant.reviews" [reviewDetails]="review"></review>
+    </div>
+  </div>
+</ion-content>

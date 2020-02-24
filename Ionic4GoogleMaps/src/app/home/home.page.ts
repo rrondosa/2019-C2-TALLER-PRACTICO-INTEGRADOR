@@ -50,6 +50,7 @@ export class HomePage {
           // loading.dismiss();
           this.addMaker(latLng.lat, latLng.lng);
       });
+      
  
     }).catch((error) => {
       console.log('Error getting location', error);
@@ -90,6 +91,56 @@ export class HomePage {
         this.address = "Address Not Available!";
       });
  
+  }
+
+
+  getRestaurants(latLng){
+    var service = new google.maps.places.PlacesService(this.map);
+    let request = {
+        location : latLng,
+        radius : 8047 ,
+        types: ["restaurant"]
+    };
+    return new Promise((resolve,reject)=>{
+        service.nearbySearch(request,function(results,status){
+            if(status === google.maps.places.PlacesServiceStatus.OK)
+            {
+                resolve(results);    
+            }else
+            {
+                reject(status);
+            }
+
+        }); 
+    });
+
+  }
+
+  createMarker(place){
+    let marker = new google.maps.Marker({
+    map: this.map,
+    animation: google.maps.Animation.DROP,
+    position: place.geometry.location
+    });   
+  } 
+
+  addMarker(){
+
+    let marker = new google.maps.Marker({
+    map: this.map,
+    animation: google.maps.Animation.DROP,
+    position: this.map.getCenter()
+    });
+
+    let content = "<p>This is your current position !</p>";          
+    let infoWindow = new google.maps.InfoWindow({
+    content: content
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+    infoWindow.open(this.map, marker);
+    });
+
   }
  
  

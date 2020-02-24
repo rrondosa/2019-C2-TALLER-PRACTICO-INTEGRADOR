@@ -1,0 +1,102 @@
+page-home {
+
+    .avatarClass img{
+        margin: 0 auto;
+/*         width: 50px;
+        height: 50px; */
+        object-fit: cover;
+    }
+
+    .cardClass{
+        box-shadow: none !important;
+        margin: -1px 0 0 0;
+        width: 100%;
+    }
+
+    // ACOMODA LAS FOTOS DEL CARRUSEL
+    .cardClass img {
+        object-fit: cover;
+      }
+
+    .carrusel{
+        height: auto;
+        width: auto;
+    }
+
+    .todaviasirve{
+        font-family: 'Berlin Sans FB', sans-serif;
+        text-align: center;
+
+        img {
+            object-fit: scale-down;
+        }
+    }
+
+    .tituloSlide{
+        font-size: 20px;
+        margin: 10px;
+        font-family: 'Berlin Sans FB', sans-serif;  
+        color: green
+    }
+
+    .imgSlider{
+        height: 320px;
+        width: 100%;
+        float: none
+    }
+
+    .isoLogo{
+        height: 40px;
+        padding: 0 0 0 0 ;
+    }
+
+    .encabezadoCard{
+        background-color: #49A010;
+
+        h2, p{
+            color: white;
+        }
+
+    }
+
+    .toolbar-md{
+        padding: 0;
+    }
+
+    ion-card.sabiasque{
+        /* background-color:coral; */
+        background-image: url(../../assets/imgs/sabiasQue.jpg);
+        background-repeat: no-repeat;
+        background-position: center bottom; 
+        background-size: cover;
+        margin-bottom: 30px;
+    }
+
+    ion-card-header.card-header {
+        padding: 10px;
+        padding-left: 16px;
+
+        h3{
+            font-size: 15px;
+            color: green;
+            text-shadow: 2px 1px white;
+        }
+    }
+
+    ion-card-content.card-content{
+        p {
+            color: green;
+            text-shadow: 1px 1px white;
+            font: bold;
+        }
+
+    }
+
+    .swiper-pagination-bullet{
+        background: white;
+    }
+
+
+
+}
+

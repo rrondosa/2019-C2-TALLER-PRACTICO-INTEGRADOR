@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <ion-title>Editar Paso</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+    <form novalidate (ngSubmit)="editarPaso()">
+
+      <ion-card class="cardClass image-upload">
+        <label for="file-input">
+          <div *ngIf="paso.imagen; else elsePortada">
+              <img *ngIf="!img" src="{{imagesPath}}{{paso.imagen}}">
+              <img *ngIf="img" [src]="img" />
+          </div>
+          <ng-template #elsePortada>
+              <img *ngIf="!img" src="{{imagesPath}}{{portada}}">
+              <img *ngIf="img" [src]="img" />
+          </ng-template>
+          
+        </label>
+        <input id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)" />
+      </ion-card>
+
+      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
+
+      <ion-item>
+        <ion-label>Paso N°:</ion-label>
+        <ion-select [(ngModel)]="paso.numero" [ngModelOptions]="{standalone: true}">
+          <ion-option value="1">1</ion-option>
+          <ion-option value="2">2</ion-option>
+          <ion-option value="3">3</ion-option>
+          <ion-option value="4">4</ion-option>
+          <ion-option value="5">5</ion-option>
+          <ion-option value="6">6</ion-option>
+          <ion-option value="7">7</ion-option>
+          <ion-option value="8">8</ion-option>
+          <ion-option value="9">9</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea placeholder="Describa el paso" rows="5" type="text" [(ngModel)]="paso.descripcion"
+          [ngModelOptions]="{standalone: true}">
+        </ion-textarea>
+      </ion-item>
+
+      <br /><br />
+      <div style="text-align: center;">
+        <button type="submit" ion-button round color="verdeTodavia">Editar</button>
+      </div>
+
+    </form>
+  </ion-list>
+
+</ion-content>

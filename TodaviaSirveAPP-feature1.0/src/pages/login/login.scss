@@ -1,0 +1,81 @@
+page-login {
+
+    .colorDeFondo{
+        background-image: url(../../assets/imgs/fondoAcercaDe.jpg);
+        /* background: url(http://bestanimations.com/Nature/Water/rain/rain-nature-animated-gif-20.gif); */
+        background-size: cover;
+
+    }
+
+    ion-content{
+        vertical-align: middle;
+        text-align: center;
+        margin: auto;
+    }
+
+    .grid {
+        margin-top: 15%;
+    }
+
+    .imgLogo{
+        height: 200px;
+    }
+
+/*     .error {
+        color: rgb(223, 62, 62);
+        font-size: 11px;
+      }
+    
+      .error1 {
+        color: rgb(75, 75, 75);
+        border-bottom: 1px solid #ff0000;
+      }
+ */
+      .textoBlanco, a{
+          color: white;
+          font-size: 16px;
+
+          a{
+            text-decoration: underline;
+            
+          }
+      }
+
+
+    ion-item:first-child {
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+      }
+
+    ion-item:last-child {
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    }
+
+    ion-item.item {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1px;
+    margin: 0 auto;
+    width: 80%;
+    
+        .label {
+            width: 10%;
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 1.2em;
+        }
+    }
+
+    .item-inner {
+        border-bottom-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+      button.botonLoguearse{
+        margin: 0 auto;
+        width: 80%;
+        height: 45px;
+    }
+
+
+    
+} // fin

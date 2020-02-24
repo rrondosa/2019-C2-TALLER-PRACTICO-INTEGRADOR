@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-item no-lines style="background: none;" text-center>
+      <span class="todaviasirve">
+        <img class="isoLogo" src="../../assets/imgs/isologo.png">
+      </span>
+      <ion-avatar class="avatarClass" item-end>
+        <a (click)="presentPopover($event)">
+          <img *ngIf="!imagenLS" src="{{prefixURL}}{{userLog.imagen}}">
+          <img *ngIf="imagenLS" [src]="imagenLS">
+        </a>
+      </ion-avatar>
+    </ion-item>
+
+  </ion-navbar>
+</ion-header>
+
+
+
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card class="cardClass">
+    <ion-slides *ngIf="publicaciones" autoplay="4000" loop="true" speed="2000" pager="true"
+      autoplayDisableOnInteraction="false">
+      <ion-slide *ngFor="let publicacion of publicaciones" (click)="irADetalle(publicacion)">
+
+        <ion-item class="encabezadoCard">
+          <ion-avatar class="avatarClass" item-start>
+            <img src="http://placeimg.com/200/200/people">
+          </ion-avatar>
+          <h2>{{publicacion.titulo}}</h2>
+          <p>{{publicacion.subtitulo}}</p>
+        </ion-item>
+
+        <div *ngIf="publicacion.imagenPortada != NULL; else noContent">
+          <img class="imgSlider" src="{{prefixURL}}{{publicacion.imagenPortada}}">
+        </div>
+
+        <ng-template #noContent>
+          <img class="imgSlider" src="../../assets/imgs/imagenNoDisponible.png">
+        </ng-template>
+
+      </ion-slide>
+    </ion-slides>
+  </ion-card>
+
+
+  <h4 class="titulo">Publicaciones recientes</h4>
+  <hr />
+
+  <ion-list text-wrap>
+    <button ion-item *ngFor="let publicacion of publicaciones" (click)="irADetalle(publicacion)">
+      <ion-thumbnail item-start class="avatarClass">
+        <img src="{{prefixURL}}{{publicacion.imagenPortada}}">
+      </ion-thumbnail>
+      <h2>{{publicacion.titulo}}</h2>
+      <p>{{publicacion.subtitulo}}</p>
+    </button>
+  </ion-list>
+
+
+  <ion-fab bottom right>
+    <button ion-fab color="default" (click)="irACamara()">
+      <ion-icon name="image"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-card class="sabiasque">
+    <ion-card-header>
+      <h3>
+        <ion-icon name="attach"></ion-icon>&nbsp;Sabias que...
+      </h3>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{sabiasque}}</p>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

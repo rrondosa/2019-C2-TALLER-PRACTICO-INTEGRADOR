@@ -1,0 +1,44 @@
+
+.input {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 9px;
+    font-size: .9em !important;
+}
+
+ion-content {
+    // .scroll {
+    //     height: 100%
+    // }
+
+    #map {
+        width: 100%;
+        height: 40%;
+    }
+   
+    .rate_div {
+
+        rating {
+    
+            [ion-button][disabled] {
+                opacity: 1;
+            }
+            ion-buttons {
+                display: flex;
+                justify-content: left !important;
+                font-size: 20px !important;
+            }
+            
+            ion-icon {  
+                color: gray;
+                font-size: 20px !important;
+      
+              &.filled {
+                  color: #ffb400;
+                  font-size: 20px !important;   
+                }
+            }
+        }
+    
+    }
+  }

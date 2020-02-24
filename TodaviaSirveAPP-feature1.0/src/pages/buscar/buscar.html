@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Buscador de transformaciones</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<!-- 
+<ion-content padding style="background-image: url(../../assets/imgs/lupa2.png); background-repeat: no-repeat, repeat; background-position: center;">
+   -->
+  <ion-content padding>
+
+  <ion-searchbar class="searchBar" [(ngModel)]="titulo" (ionInput)="buscarPublicacion()"
+    placeholder="Ingresa un elemento..."></ion-searchbar>
+
+  <ion-list text-wrap padding>
+    <button ion-item *ngFor="let publicacion of publicaciones | async" (click)="irADetalle(publicacion)">
+      <ion-thumbnail item-start>
+        <img src="{{prefixURL}}{{publicacion.imagenPortada}}">
+      </ion-thumbnail>
+      <h2>{{publicacion.titulo}}</h2>
+      <p>{{publicacion.subtitulo}}</p>
+    </button>
+  </ion-list>
+
+
+    <ion-item [hidden]="!mostrar" text-center>
+      <p>Sin resultados :(</p>
+    </ion-item>
+
+</ion-content>

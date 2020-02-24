@@ -1,0 +1,46 @@
+<!-- <ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Mi Perfil</ion-title>
+  </ion-navbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-list>
+
+    <ion-avatar class="avatarClass">
+      <img *ngIf="!imagenLS" src="https://todaviasirve.azurewebsites.net/Content/Images/{{usuarioLogueado.imagen}}">
+      <img *ngIf="imagenLS" [src]="imagenLS">
+    </ion-avatar>
+
+    <ion-item text-center>
+      <h1>{{usuarioLogueado.username}}</h1>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="finger-print"></ion-icon>
+      &nbsp;{{usuarioLogueado.nombre}} {{usuarioLogueado.apellido}}
+    </ion-item>
+    <ion-item>
+      <ion-icon name="at"></ion-icon>
+      &nbsp;{{usuarioLogueado.email}}
+    </ion-item>
+
+    <div class="divBotones">
+      <button ion-button full (click)="irAEditarUsuario()">
+        <ion-icon name="create">&nbsp;&nbsp;</ion-icon>
+        Editar Cuenta
+      </button>
+    </div>
+
+<!--     <div class="divBotones">
+      <button ion-button full color="danger" (click)="cerrarSesion()">
+        <ion-icon name="log-out">&nbsp;&nbsp;</ion-icon>
+        Cerrar Sesion
+      </button>
+    </div> -->
+
+
+  </ion-list>
+</ion-content>

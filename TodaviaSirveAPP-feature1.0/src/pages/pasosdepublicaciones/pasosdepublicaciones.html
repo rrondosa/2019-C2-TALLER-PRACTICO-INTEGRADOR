@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <ion-title>Pasos de la Publicacion</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let paso of pasos" #slidingItem>
+
+      <ion-item *ngIf="paso.imagen; else elseImagen" (click)="irAEditarPaso(paso)">
+        <ion-thumbnail item-start class="itemClass">
+          <img src="{{imagesPath}}{{paso.imagen}}">
+        </ion-thumbnail>
+        <h2 text-wrap>{{paso.descripcion}}</h2>
+        <p>Paso {{paso.numero}}</p>
+      </ion-item>
+      
+      <ng-template #elseImagen>
+          <ion-item (click)="irAEditarPaso(paso)">
+              <ion-thumbnail item-start class="itemClass">
+                <img src="{{imagesPath}}{{publicacion.imagenPortada}}">
+              </ion-thumbnail>
+              <h2>{{paso.numero}}</h2>
+              <p text-wrap>{{paso.descripcion}}</p>
+            </ion-item>
+      </ng-template>
+
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="mostrarConfirmacion(paso.id, slidingItem)">
+          <ion-icon name="trash"></ion-icon>
+          Eliminar
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+      </ion-item-options>
+
+    </ion-item-sliding>
+  </ion-list>
+
+  <div text-center padding-bottom>
+    <button ion-button round color="verdeTodavia" (click)="irACrearPaso()">Agregar paso</button>
+  </div>
+
+
+</ion-content>

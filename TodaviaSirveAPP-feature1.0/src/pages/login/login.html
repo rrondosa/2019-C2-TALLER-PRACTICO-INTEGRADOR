@@ -1,0 +1,73 @@
+<!-- <ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>login</ion-title>
+  </ion-navbar>
+</ion-header>
+ -->
+<ion-content class="colorDeFondo">
+
+  <ion-grid>
+    <form novalidate (ngSubmit)="loguearUsuario()" [formGroup]="signupform">
+
+      <ion-row>
+        <ion-col col-12>
+          <img src="../../assets/icon/icono_todavia.ico" />
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+          <ion-item>
+            <ion-input text-center type="text" placeholder="Email" [(ngModel)]="userData.email" formControlName="email"
+              [class.error1]="!signupform.controls.email.valid && signupform.controls.email.dirty">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+          <ion-item no-lines>
+            <ion-input text-center type="password" placeholder="Contraseña" [(ngModel)]="userData.password"
+              formControlName="password"
+              [class.error1]="!signupform.controls.password.valid && signupform.controls.password.dirty"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+          <!-- <button type="submit" ion-button full round color="verdeTodavia"[disabled]="signupform.invalid">Loguearse</button> -->
+          <button class="botonLoguearse" type="submit" ion-button full round color="verdeTodavia">Loguearse</button>
+        </ion-col>
+      </ion-row>
+
+    </form>
+
+    <ion-row>
+      <ion-col col-12>
+        <div>
+          <p class="textoBlanco">
+            ¿No tienes una cuenta? <a (click)="irARegistrar()">Registrate</a>
+          </p>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+  </ion-grid>
+
+
+
+
+
+
+</ion-content>
+
+
+<style type="text/css">
+
+</style>

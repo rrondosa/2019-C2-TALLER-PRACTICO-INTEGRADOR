@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Ionic Camera
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-button (click)="takePicture()">Take picture2</ion-button>
+  <img *ngIf="image" [src]="image" alt="image">
+
+  <hr>
+  <input #imageUser type="hidden" [value]="urlImage | async">
+  
+  <div class="form-group">
+    <h5>Seleccionar image:</h5>
+    <input type="file" accept="Pictures/*" (change)="onUpload($event)"  >
+  </div>
+  <div class="progress">
+    <div [style.visibility]="(uploadPercent == 0) ? 'hidden' : 'visible'" class="progress-bar progress-bar-striped bg-success"
+      role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+
+      <!-- <span class="progressText" *ngIf="urlImage | async">
+        Ok!!</span> -->
+    </div>
+  </div>
+  
+  <ion-card class="cardClass">
+    <img *ngIf="urlImage" [src]="urlImage | async" />
+  </ion-card>
+  <br>
+</ion-content>

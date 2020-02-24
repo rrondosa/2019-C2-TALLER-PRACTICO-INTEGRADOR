@@ -1,0 +1,151 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Como se hace</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+
+    <ion-item class="encabezadoCard">
+      <ion-avatar item-start>
+        <img src="http://placeimg.com/200/200/people">
+        <!--         <img src="{{imagenURL}}{{usuario.imagen}}"> -->
+      </ion-avatar>
+      <h2>{{publicacion.titulo}}</h2>
+      <p>{{publicacion.subtitulo}}</p>
+    </ion-item>
+
+    <ion-slides class="carrusel" pager="true">
+      <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
+      <ion-slide center *ngFor="let paso of pasos">
+        <div *ngIf="paso.imagen; else elseImagen">
+          <img class="imgCarrusel" src="{{imagenURL}}{{paso.imagen}}">
+        </div>
+        <ng-template #elseImagen>
+          <img class="imgCarrusel" src="{{imagenURL}}{{publicacion.imagenPortada}}">
+        </ng-template>
+        <ion-card-content>
+          <h4 style="text-align: left;">Paso {{paso.numero}}:</h4>
+          <hr />
+          <p style="text-align: left;">
+            <strong>{{paso.descripcion}}</strong>
+          </p>
+        </ion-card-content>
+      </ion-slide>
+    </ion-slides>
+
+    <ion-row>
+      <ion-col col-3>
+        <div *ngIf="meGusta; else elseLike">
+          <button ion-button icon-start clear small (click)="cargarLike()">
+            <ion-icon name="thumbs-up"></ion-icon>
+            <div>{{cantLike}}</div>
+          </button>
+        </div>
+        <ng-template #elseLike>
+          <button ion-button icon-start clear small color="dark" (click)="cargarLike()">
+            <ion-icon name="thumbs-up" color="dark"></ion-icon>
+            <div>{{cantLike}}</div>
+          </button>
+        </ng-template>
+      </ion-col>
+      <ion-col col-5>
+        <button ion-button icon-start clear small (click)="cargarPublicacion()">
+          <ion-icon name="text"></ion-icon>
+          <div *ngIf="this.cantidad">
+            {{cantidad}} Comentarios
+          </div>
+
+        </button>
+      </ion-col>
+      <ion-col align-self-center text-center col-4>
+        <div *ngIf="esFavorito; else elseBlock">
+          <button ion-button icon-start clear small (click)="cargarFavorito()">
+            <ion-icon name="star"></ion-icon>
+            <div>Favorito</div>
+          </button>
+        </div>
+        <ng-template #elseBlock>
+          <button ion-button icon-start clear small color="dark" (click)="cargarFavorito()">
+            <ion-icon name="star" color="dark"></ion-icon>
+            <div>Favorito</div>
+          </button>
+        </ng-template>
+      </ion-col>
+      <!-- <ion-col align-self-center text-center>
+        <ion-note>
+          Hace 11h
+        </ion-note>
+      </ion-col> -->
+    </ion-row>
+
+    <div *ngIf="valor">
+      <!-- Disabled and readonly textarea in an item with a stacked label -->
+      <!-- <ion-list *ngFor="let listadoComentarios of comentarioCantidad"> -->
+      <ion-list *ngFor="let comenUsu of listadoComentarios">
+        <ion-item>
+          <ion-avatar class="imagenComentario" item-start>
+            <img src="{{imagenURL}}{{comenUsu.imagen}}">
+          </ion-avatar>
+          <p class="textoComentario" text-wrap>{{comenUsu.comentario}}</p>
+        </ion-item>
+      </ion-list>
+
+      <!-- </ion-list> -->
+
+      <ion-list>
+        <form novalidate (ngSubmit)="submitComentario()" [formGroup]="signupform">
+
+          <ion-item class="inputComentarAqui">
+            <ion-input placeholder="Comenta aquí..." [(ngModel)]="comentario" formControlName="comentario"
+              [class.error1]="!signupform.controls.comentario.valid && signupform.controls.comentario.dirty">
+            </ion-input>
+          </ion-item>
+
+          <div class="botonComentar" text-center>
+            <button ion-button type="submit" color="verdeTodavia" [disabled]="signupform.invalid"
+              round>Comentar</button>
+          </div>
+        </form>
+
+      </ion-list>
+    </div>
+
+  </ion-card>
+
+  <h4 class="titulo">Videos Relacionados</h4>
+  <hr />
+
+  <p padding>Pausado api youtube</p>
+
+  <ion-list>
+    <ion-item *ngFor="let item of videosEncontrados" text-wrap>
+      <ion-thumbnail item-start>
+        <img src="{{item.snippet.thumbnails.medium.url}}">
+      </ion-thumbnail>
+      <a class="linkVideoAPI" href="https://www.youtube.com/watch?v={{item.id.videoId}}">{{item.snippet.title}}</a>
+    </ion-item>
+  </ion-list>
+
+  <h4 class="titulo">Encuentra mas ideas</h4>
+  <hr />
+  <ion-grid class="grid">
+    <ion-row>
+      <ion-col col-6>
+        <a href="https://www.youtube.com/results/?q={{publicacion.titulo}}">
+          <img class="botonMasIdeas" src="{{imagenURL}}boton_youtube.png"></a>
+      </ion-col>
+      <ion-col col-6>
+        <a href="https://ar.pinterest.com/search/pins/?q={{publicacion.titulo}}">
+          <img class="botonMasIdeas" src="{{imagenURL}}boton_pinterest.png"></a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>

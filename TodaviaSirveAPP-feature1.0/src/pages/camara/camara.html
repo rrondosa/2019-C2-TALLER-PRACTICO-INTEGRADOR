@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-navbar color="verdeTodavia">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Detectar Objeto</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 class="columnaIzq">
+          <div class="image-upload" text-center>
+              <label for="file-input">
+                <!-- <img src="../../assets/imgs/detectionEye.png" /> -->
+                <img src="../../assets/imgs/iconogal4.png" />
+              </label>
+              <input id="file-input" type="file" accept="image/*" (change)="getPicture($event)" />
+            </div>
+      </ion-col>
+
+      <ion-col col-6 text-left>
+          <ion-fab>
+              <button ion-fab color="default" (click)="getPictureCam()">
+                <ion-icon name="camera"></ion-icon>
+              </button>
+            </ion-fab>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <ion-card class="cardClass">
+    <img *ngIf="image" [src]="image" />
+  </ion-card>
+
+
+  <!--   <div class="contentButton" *ngIf="image">
+     <button ion-button round full text-center *ngFor="let item of encontrado" (click)="buscarPublicacion(item)">
+        {{item}}
+      </button>
+  </div> -->
+
+  <ion-list *ngIf="image" class="card-background-page">
+    <ion-item button *ngFor="let publicacion of publicaciones | async" (click)="irADetalle(publicacion)">
+      <ion-card>
+        <img src="{{prefixURL}}{{publicacion.imagenPortada}}" />
+        <div class="card-title" text-wrap>{{publicacion.titulo}}</div>
+        <!-- <div class="card-subtitle">{{publicacion.subtitulo}}</div> -->
+      </ion-card>
+    </ion-item>
+  </ion-list>
+
+  <!-- <div>
+      <button ion-button round full text-center *ngFor="let item of encontrado" (click)="buscarPublicacion(item)">
+        {{item}}
+      </button>
+    </div> -->
+
+  <ion-item [hidden]="!mostrar" text-center>
+    <p>Sin resultados :(</p>
+  </ion-item>
+
+</ion-content>

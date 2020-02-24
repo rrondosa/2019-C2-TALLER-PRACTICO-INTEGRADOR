@@ -1,0 +1,27 @@
+page-pasos {
+
+    .image-upload > input
+    {
+        display: none;
+    }
+    
+    .image-upload img
+    {
+        cursor: pointer;
+    }
+
+    .cardClass img{
+        margin: 0 auto;
+        width: 360px;
+        height: 360px;
+        object-fit: cover;
+    }
+
+    .pieDeImagen{
+        color: silver;
+        text-align: center
+    }
+
+
+
+}

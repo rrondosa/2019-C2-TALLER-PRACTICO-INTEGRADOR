@@ -1,0 +1,7 @@
+{
+  "name": "TodaviaSirveApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

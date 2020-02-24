@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar color="ionic">
+    <ion-buttons start>
+      <button ion-button navPop>
+        Close
+      </button>
+    </ion-buttons>
+    <ion-title>{{name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>  
+  <ion-slides [options]="slideOptions">
+    <ion-slide *ngFor="let photo of photos">
+      <img class="image" [src]="photo.original">
+      <ion-item no-padding no-lines>
+        <ion-avatar item-left>
+          <img [src]="photo.userPhoto">
+        </ion-avatar>
+        {{photo.user}}
+      </ion-item>
+    </ion-slide>    
+  </ion-slides>  
+</ion-content>
