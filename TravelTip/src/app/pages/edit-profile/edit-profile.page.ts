@@ -124,9 +124,9 @@ export class EditProfilePage implements OnInit {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,
         cssClass: 'bg-profile',
-        message: 'Your Data was Edited!',
+        message: 'Sus datos fueron editados!',
         duration: 3000,
-        position: 'bottom'
+        position: 'middle'
       });
 
       toast.present();

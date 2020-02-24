@@ -12,7 +12,7 @@
     <ion-card-content class="bg-profile">
       
         <label for="file-input">
-          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}">
+          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}} | async">
           <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
           
         </label>
