@@ -3,28 +3,22 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Edit Profile</ion-title>
+    <ion-title>Editar perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="profile">
   <ion-card no-margin>
-    <!-- <form novalidate (ngSubmit)="sendData()" [formGroup]="signupform"> -->
     <ion-card-content class="bg-profile">
-      <!-- <img src="assets/img/avatar.png"> -->
-      <!-- <ion-icon name="contact"></ion-icon> -->
       
-      <ion-card class="cardClass image-upload">
         <label for="file-input">
           <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}">
           <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
-          <!-- <img src="assets/img/avatar.png"> -->
+          
         </label>
         <input id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
-      </ion-card>
-      <p class="pieDeImagen">(toca sobre la imagen para editar)</p>
-      
-      <h1 class="fw500">{{userAct.nombre}} {{userAct.apellido}}</h1>
+      <p color="light" class="fw100">(toca sobre la imagen para editar)</p>
+      <h1 class="text08">{{userAct.nombre}} {{userAct.apellido}}</h1>
       <h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2>
       
       <ion-button icon-left color="secondary" (change)="onFileChanged($event)" >
@@ -65,10 +59,10 @@
             </ion-item>
     
             <ion-item>
-              <ion-label color="dark">Cuidad</ion-label>
-              <ion-select>
-                <ion-select-option value="nes">Buenos Aires</ion-select-option>
-                <ion-select-option value="n64">Corrientes</ion-select-option>
+              <ion-label color="dark" >Cuidad</ion-label>
+              <ion-select  value={{userAct.cuidad}}  [(ngModel)]="userAct.cuidad">
+                <ion-select-option value="bsas">Buenos Aires</ion-select-option>
+                <ion-select-option value="co">Corrientes</ion-select-option>
                 <ion-select-option value="ps">La Paz</ion-select-option>
                 <ion-select-option value="genesis">Paris</ion-select-option>
                 <ion-select-option value="saturn">São Paulo</ion-select-option>
@@ -79,11 +73,11 @@
     
             <ion-item>
               <ion-label color="dark">Pais</ion-label>
-              <ion-select>
-                <ion-select-option value="nes">NY</ion-select-option>
-                <ion-select-option value="n64">CA</ion-select-option>
+              <ion-select  value={{userAct.pais}}  [(ngModel)]="userAct.pais">
+                <ion-select-option value="AR">Argentina</ion-select-option>
+                <ion-select-option value="BR">Brasil</ion-select-option>
                 <ion-select-option value="ps">Greater London</ion-select-option>
-                <ion-select-option value="genesis">Paris</ion-select-option>
+                <ion-select-option value="PR">Perú</ion-select-option>
                 <ion-select-option value="saturn">SP</ion-select-option>
                 <ion-select-option value="snes">Kantō</ion-select-option>
                 <ion-select-option value="snes">Delhi</ion-select-option>
@@ -92,19 +86,19 @@
           </ion-list>
 
           <ion-list>
-            <ion-radio-group>
-              <ion-list-header color="light">
-                <ion-label class="fw700">User Type</ion-label>
+            <ion-radio-group [(ngModel)]="userAct.tipoCliente"  >
+              <ion-list-header color="light" >
+                <ion-label class="fw700">Tipo de usuario</ion-label>
               </ion-list-header>
           
               <ion-item>
                 <ion-label color="primary">Cliente</ion-label>
-                <ion-radio slot="start" value="customer" checked></ion-radio>
+                <ion-radio slot="start" value="Cliente" name="tipo"></ion-radio>
               </ion-item>
           
               <ion-item>
                 <ion-label color="primary">Empresa</ion-label>
-                <ion-radio slot="start" value="agent"></ion-radio>
+                <ion-radio slot="start" value="Empresa" name ="tipo"></ion-radio>
               </ion-item>
             </ion-radio-group>
 
@@ -113,7 +107,6 @@
               <ion-checkbox></ion-checkbox>
             </ion-item> -->
           </ion-list>
-  
         </ion-col>
       </ion-row>
     </ion-grid>

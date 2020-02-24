@@ -11,7 +11,9 @@ export interface Usuario{
     username?: string;
     photoUrl?:string;
     roles?: Roles;
-    tipoCliente?:number,
+    tipoCliente?:String,
     direccion?:string;
+    cuidad?:string;
+    pais?:string
    
 }
