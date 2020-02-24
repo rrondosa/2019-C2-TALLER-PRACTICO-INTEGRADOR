@@ -36,6 +36,7 @@ import { IonicRatingModule } from 'ionic4-rating';
 
 // map cordova
 import { GoogleMaps } from '@ionic-native/google-maps';
+import { Camera } from '@ionic-native/camera/ngx';
 
 @NgModule({
   declarations: [AppComponent, NotificationsComponent],
@@ -61,7 +62,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     Geolocation,
     NativeGeocoder,
     GoogleMaps,
-    AngularFireStorage
+    AngularFireStorage,
+    Camera
   ],
   bootstrap: [AppComponent]
 })

@@ -8,7 +8,9 @@ import { AngularFireStorage  } from '@angular/fire/storage';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { debug } from 'util';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import * as firebase from 'firebase';
+import { storage, initializeApp, apps, auth } from 'firebase';
 
 
 @Component({
@@ -25,7 +27,9 @@ export class EditProfilePage implements OnInit {
     private authservice :AuthService,
     private userService : UserService,
     private firebaseStorage:AngularFireStorage,
-    private firebase : AngularFireAuth
+    private firebase : AngularFireAuth,
+    private camera: Camera,
+    private alertCtrl: AlertController
   ) { 
     this.authservice.isAuth().subscribe(auth => {
       if (auth) {
@@ -64,8 +68,10 @@ export class EditProfilePage implements OnInit {
   uploadPercent: Observable<number>;
   urlImage: Observable<string>;
   urlImgString : string;
-  alertCtrl: AlertController;
 
+  image: string;
+  captureDataUrl: string;
+  
   async ngOnInit() { 
 
     // this.urlImage = this.userAct.photoUrl ? this.userAct.photoUrl :"assets/img/avatar.png";
@@ -94,20 +100,13 @@ export class EditProfilePage implements OnInit {
           ref.getDownloadURL().subscribe(downloadURL => {
             debugger;
               console.log("downloadURL_1",downloadURL);
-              this.urlImgString=downloadURL;
-              let user = this.firebase.auth.currentUser;
-              user.updateProfile({
-                photoURL: downloadURL
-              }).then(function() {
-                // Update successful.downloadURL
-                this.userAct.photoUrl=downloadURL;
-              }).catch(function(error) {
-                // An error happened.
-              });
+              this.userAct.photoUrl=downloadURL;
+             
           });
         })
       )
     .subscribe();   
+    this.showSuccesfulUploadAlert();
      
   }
   
@@ -118,13 +117,17 @@ export class EditProfilePage implements OnInit {
     });
 
     loader.present();
+    
     console.log("usuario modficado",this.userAct);
+    this.actualizaUserActEmail();
+    this.actualizaUserActPhoto();    
     this.userService.updateUser(this.userAct);
+    
     loader.onWillDismiss().then(async l => {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,
         cssClass: 'bg-profile',
-        message: 'Sus datos fueron editados!',
+        message: 'Sus datos fueron editados exitosamente!',
         duration: 3000,
         position: 'middle'
       });
@@ -133,16 +136,91 @@ export class EditProfilePage implements OnInit {
       this.navCtrl.navigateForward('/home-results');
     });
   }
-
-  getCurrentUser() {
-    this.authservice.isAuth().subscribe(auth => {
-      if (auth) {
-        this.userUid = auth.uid;
-        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
-          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
-        })
-      }
-    })
+  actualizaUserActEmail(){
+    let user = this.firebase.auth.currentUser;
+    user.updateEmail( this.userAct.email).then(function() {
+      // Update successful.downloadURL
+    }).catch(function(error) {
+      // An error happened.
+    });
   }
+  actualizaUserActPhoto(){
+    let user = this.firebase.auth.currentUser;
+    user.updateProfile({
+      photoURL:this.userAct.photoUrl
+    }).then(function() {
+      // Update successful.downloadURL
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
+  async takePicture() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.CAMERA
+    };
+    this.camera.getPicture(options)
+    .then((imageData) => {
+      console.log(imageData);
+      // this.image = this.webView.convertFileSrc(imageData);
+      this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
+      // this.captureDataUrl = imageData;
+      
+      console.log(this.captureDataUrl);
+      
+      this.upload();
+
+      
+    }, (err) => {
+      console.log(err);
+    });
+
+  }
+  async upload() {
+    let storageRef = storage().ref();
+    // Create a timestamp as filename
+	
+    const filename = Math.floor(Date.now() / 1000);
+
+    // Create a reference to 'images/todays-date.jpg'
+    const metadata = {
+      contentType: 'image/jpeg'
+    };
+    const imageRef = storageRef.child(`fotosUsuarios/profile_${filename}.jpg`);
+
+    imageRef.putString(this.captureDataUrl, firebase.storage.StringFormat.DATA_URL ).then((snapshot)=> {
+        // Do something here when the data is succesfully uploaded!
+        
+        snapshot.ref.getDownloadURL().then(downloadURL=> {
+          console.log('File available at', downloadURL);     
+          this.userAct.photoUrl = downloadURL;  
+          console.log("antes tomar ------>",this.userAct.photoUrl);
+        });
+        console.log("des tomar ------>",this.userAct.photoUrl);
+        
+        this.showSuccesfulUploadAlert();
+           
+    });
+
+  
+        
+  }
+
+
+    async  showSuccesfulUploadAlert() {
+      const  alert =await  this.alertCtrl.create({
+        header: "Nueva foto",
+        message: 'La foto se cambio correctamente.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      // clear the previous photo data in the variable
+    
+      this.captureDataUrl = "";
+    }
+
 
 }

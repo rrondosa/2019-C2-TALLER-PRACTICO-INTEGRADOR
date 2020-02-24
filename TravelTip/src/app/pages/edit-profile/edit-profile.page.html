@@ -12,7 +12,7 @@
     <ion-card-content class="bg-profile">
       
         <label for="file-input">
-          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}} | async">
+          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}" id="imgPerfil">
           <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
           
         </label>
@@ -21,9 +21,9 @@
       <h1 class="text08">{{userAct.nombre}} {{userAct.apellido}}</h1>
       <h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2>
       
-      <ion-button icon-left color="secondary" (change)="onFileChanged($event)" >
-        <ion-icon name="photos"></ion-icon> 
-        Editar / + Avatar
+      <ion-button icon-left color="secondary" (click)="takePicture()" >
+        <ion-icon name="camera"></ion-icon> 
+        Tomar foto
       </ion-button>
     
     </ion-card-content>
