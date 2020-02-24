@@ -123,7 +123,7 @@ export class LoginPage implements OnInit {
     const toast = await this.toastCtrl.create({
       message: msj,
       duration: 3000,
-      position: 'top',      
+      position: 'middle',      
     });
 
     await toast.present();
@@ -137,6 +137,18 @@ export class LoginPage implements OnInit {
           this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
         })
       }
+    })
+  }
+
+  onLoginInvitado(){
+    
+    this.authService.login("invitado@travelhints.com", "123456").then( (res) => {
+      
+      this.presentToast("BIENVENID@ TRAVEL HINTS!" );
+      this.navCtrl.navigateRoot('/home-results');
+    }).catch(err => {
+      console.error(err);
+      this.presentToast("USUARIO INCORRECTO");
     })
   }
 

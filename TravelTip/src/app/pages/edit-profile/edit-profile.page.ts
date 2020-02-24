@@ -8,10 +8,12 @@ import { AngularFireStorage  } from '@angular/fire/storage';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import * as firebase from 'firebase';
 import { storage, initializeApp, apps, auth } from 'firebase';
 
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-edit-profile',
@@ -29,7 +31,8 @@ export class EditProfilePage implements OnInit {
     private firebaseStorage:AngularFireStorage,
     private firebase : AngularFireAuth,
     private camera: Camera,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private router : Router 
   ) { 
     this.authservice.isAuth().subscribe(auth => {
       if (auth) {
@@ -44,7 +47,7 @@ export class EditProfilePage implements OnInit {
         });
         
         this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
-          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+          this.isInvitado = Object.assign({}, userRole.roles).hasOwnProperty('invitado');
         })
       }
     })
@@ -60,7 +63,7 @@ export class EditProfilePage implements OnInit {
     } else console.log("NO SE LOGUEO");
   }
   
-  public isAdmin: any = null;
+  public isInvitado: any = null;
   public userUid: string = null;
 
   private userAct : Usuario = {};  
@@ -221,6 +224,14 @@ export class EditProfilePage implements OnInit {
     
       this.captureDataUrl = "";
     }
-
+  
+    goToRegister() {
+      // this.authservice.logout();
+      // this.navCtrl.navigateRoot('/register');
+      this.firebase.auth.signOut().then(() => {
+      
+        this.router.navigate(['/register']);
+      })
+    }
 
 }

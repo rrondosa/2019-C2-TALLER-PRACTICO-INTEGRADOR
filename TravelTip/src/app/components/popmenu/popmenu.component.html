@@ -24,7 +24,15 @@
     </div>
     <div class="popup-menu-item">
       <ion-icon name="beer" slot="middle" size="large" routerLink="/map-actividad" routerDirection="root"></ion-icon>
-      <span>Actividades</span>
+      <span>Act</span>
+    </div>
+    <div [hidden]="isInvitado" class="popup-menu-item">
+      <ion-icon name="heart" slot="middle" size="large" routerLink="/map-actividad" routerDirection="root"></ion-icon>
+      <span>Fav</span>
+    </div>
+    <div class="popup-menu-item">
+      <ion-icon name="done-all" slot="middle" size="large" routerLink="/map-actividad" routerDirection="root"></ion-icon>
+      <span>Tips</span>
     </div>
     
   </div>

@@ -8,15 +8,15 @@
 </ion-header>
 
 <ion-content class="profile">
-  <ion-card no-margin>
-    <ion-card-content class="bg-profile">
+  <ion-card no-margin> 
+    <ion-card-content class="bg-profile" [hidden]="isInvitado">
       
         <label for="file-input">
-          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}" id="imgPerfil">
-          <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
-          
+          <img *ngIf="userAct.photoUrl && !isInvitado" src="{{userAct.photoUrl}}" id="imgPerfil">
+          <img *ngIf="!userAct.photoUrl && !isInvitado" src="assets/img/avatar.png" />
+          <img *ngIf="isInvitado" src="assets/img/logo_blanco.png" />
         </label>
-        <input id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
+        <input *ngIf="isInvitado" id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
       <p color="light" class="fw100">(toca sobre la imagen para editar)</p>
       <h1 class="text08">{{userAct.nombre}} {{userAct.apellido}}</h1>
       <h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2>
@@ -27,8 +27,15 @@
       </ion-button>
     
     </ion-card-content>
+    <ion-card-content class="bg-profile" [hidden]="!isInvitado">
+      
+        <img *ngIf="isInvitado" src="assets/img/logo_blanco.png" />
+     
+    <h1 class="text08">Invitado</h1>
+ 
+    </ion-card-content>
   
-    <ion-grid fixed no-padding>
+    <ion-grid fixed no-padding [hidden]="isInvitado">
       
       <ion-row>
         <ion-col size="12" padding>
@@ -110,16 +117,19 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  
-    <ion-button size="large" expand="full" color="dark" (click)="sendData()"  no-margin>Editar</ion-button>
+    
+    <div padding [hidden]="!isInvitado">
+    <ion-text color="dark" style="font-size: larger;" no-margin>
+      ¡El mejor compañero de viaje que te ayuda a mejorar tu experiencia! Nuestra aplicación TRAVELHINTS encontrarás en ayuda para buscar tu traslado a tu hospedaje, si el hotel en cual te reservaste no es lo esterabas te daremos opciones cercanas a tu ubicación, sabemos que quieres ver lo máximo posible de la zona local por eso te daremos opciones de excursiones, lugares para disfrutar de la gastronomía del lugar y ¡mucho más!
+    </ion-text>
+    </div>
+
+    <ion-button [hidden]="!isInvitado" size="large" expand="full" color="dark" (click)="goToRegister()"  no-margin>Registarse</ion-button>
+
+    <ion-button [hidden]="isInvitado" size="large" expand="full" color="dark" (click)="sendData()"  no-margin>Editar</ion-button>
     <!-- <ion-button size="large" expand="full" color="dark"  type="submit" no-margin>Editar</ion-button> -->
     <!-- </form> -->
   </ion-card>
   
-  <!-- <div padding>
-    <ion-text color="dark" no-margin>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum odio placeat incidunt nesciunt atque ratione quisquam, fugit
-      omnis maxime adipisci excepturi dignissimos aliquam asperiores itaque unde sequi? Minus, quia, dolore?
-    </ion-text>
-  </div> -->
+  
 </ion-content>

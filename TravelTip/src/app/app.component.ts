@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -9,6 +9,7 @@ import { Pages } from './interfaces/pages';
 import { AuthService } from "./servicios/auth.service";
 import { Usuario } from './models/usuario.model';
 import { UserService } from "./servicios/user.service";
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { UserService } from "./servicios/user.service";
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
   public appPages: Array<Pages>;
   public isAdmin: any = null;
@@ -29,20 +30,27 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public navCtrl: NavController,
-    public authservice : AuthService,
-    public userService :UserService
+    private authservice : AuthService,
+    private userService :UserService,
+    private fireAuth :AngularFireAuth
   ) {
+
     
     this.initializeApp();
-    this.getCurrentUser();
-    if(this.userUid){
-      this.userService.getOneUser(this.userUid).subscribe(book => {
-        this.userAct = book;
-      });
-      console.log("user act:",this.userAct);
+    // let user = this.fireAuth.auth.currentUser;
+    // debugger;
+    // if(user){
+    //   // this.userAct = this.userService.getOneUser(user.uid);
+    //   this.userService.getOneUser(this.userUid).subscribe(userdb => {
+    //     this.userAct = userdb;
+    //     this.userAct.photoUrl = user.photoURL;
+    //     console.log("userDb",userdb);
       
-    } else console.log("NO SE LOGUEO");
-    
+    //   });
+    // }else{
+    //   console.log("NO SE LOGUEO");
+    // }
+   
     
 
     this.appPages = [
@@ -68,6 +76,27 @@ export class AppComponent {
     ];
 
 
+  }
+  async ngOnInit(){
+    await this.authservice.isAuth().subscribe(auth => {
+      // debugger;
+      if (auth) {
+        this.userUid = auth.uid;
+        console.log("auth",auth);
+        
+        this.userService.getOneUser(this.userUid).subscribe(userdb => {
+          this.userAct = userdb;
+          this.userAct.photoUrl = auth.photoURL;
+          console.log("userDb",userdb);
+        
+        });
+        
+        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
+          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+        })
+      }
+    })
+    
   }
 
   initializeApp() {    
