@@ -59,8 +59,9 @@
 				  (ionChange)="codeSelected($event)" required >
 					  
 					  <ion-select-option [value]="h">Hospedaje</ion-select-option>
-					  <ion-select-option [value]="a">Actividad</ion-select-option>
+					  <ion-select-option [value]="a">Excursión</ion-select-option>
 					  <ion-select-option [value]="t">Transporte</ion-select-option>
+					  <ion-select-option [value]="t">Gastronomía</ion-select-option>
 				</ion-select>
 		  </ion-item>
 		  <ion-item *ngIf="tipoAct=='Hospedaje'" no-padding class="animated fadeInUp">
@@ -77,7 +78,7 @@
 				
 			  
 		  </ion-item>
-		  <ion-item *ngIf="tipoAct=='Actividad'" no-padding class="animated fadeInUp">
+		  <ion-item *ngIf="tipoAct=='Excursión' || tipoAct=='Gastronomía'" no-padding class="animated fadeInUp">
 			  <ion-item no-padding class="animated fadeInUp">
 				  <ion-label position="floating">
 					<!-- <ion-icon name="direccion" item-start></ion-icon> -->
@@ -96,11 +97,9 @@
 				  </ion-label>
 				  <ion-input inputmode="text"  [(ngModel)]="patente"></ion-input>
 			  </ion-item>
-				
-			  
+			
 		  </ion-item>
   
-		  
 		  <ion-item no-padding class="animated fadeInUp">
 			<ion-label position="floating">
 			  <ion-icon name="logo-usd" item-start></ion-icon>

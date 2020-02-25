@@ -15,6 +15,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 import * as firebase from 'firebase';
 import { storage, initializeApp, apps, auth } from 'firebase';
+import { Geocoder, GeocoderResult } from '@ionic-native/google-maps';
 
 declare var google:any;
 
@@ -189,15 +190,18 @@ export class CrearActividadPage implements OnInit {
       case "Hospedaje":
         this.actvidadNva.tipo.hospedaje = this.amb;
         break;
-      case "Actividad":
+      case "Excursión":
         this.actvidadNva.tipo.actividad = this.description;
+        break;
+      case "Gastronomía":
+        this.actvidadNva.tipo.gastronomia = this.description;
         break;
       case "Transporte":
         this.actvidadNva.tipo.transporte = this.patente;
         break;
     }
- console.log("nvaaaaa----->", this.actvidadNva);
- 
+    console.log("nvaaaaa----->", this.actvidadNva);
+   
     this.actividadService.addActividad(this.actvidadNva);
     
     loader.onWillDismiss().then(async l => {
@@ -210,7 +214,7 @@ export class CrearActividadPage implements OnInit {
       });
 
       toast.present();
-      // this.navCtrl.navigateForward('/home-results');
+      this.closeModal();
     });
   }
  

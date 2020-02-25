@@ -19,10 +19,10 @@
   <ion-toolbar color="dark">
     <ion-searchbar [(ngModel)]="searchKey"></ion-searchbar>
     <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
+      <!-- <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
         <ion-icon name="options"></ion-icon>
-      </ion-button>
-      <ion-button size="small" shape="round" color="medium" (click)="addActividad()">
+      </ion-button> -->
+      <ion-button [hidden]="isInvitado"  size="small" shape="round" color="medium" (click)="addActividad()">
         <ion-icon name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -59,12 +59,12 @@
     </ion-item>
   </ion-card>
 
-  <ion-card class="bg-white">
+  <!-- <ion-card class="bg-white">
     <ion-img [src]="themeCover"></ion-img>
     <ion-button expand="full" color="dark" (click)="presentImage(themeCover)" no-margin>
       Modal 1: Modal Image
     </ion-button>
-  </ion-card>
+  </ion-card> -->
 
   <!-- <ion-button margin shape="round" expand="full" color="secondary" (click)="searchFilter()">
     Modal 2: Search Filter
@@ -73,8 +73,78 @@
  
 
   
-  <div #map id="map"></div>
+  <h3>Mis favaritos</h3>
+  <ion-slides class="sel" pager="true">
+    <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
+    <ion-slide center *ngFor="let s of sliderTwo.slidesItems">
+      <div *ngIf="s.image; else elseImagen">
+        <img class="imgCarrusel" src="{{s.image}}">
+      </div>
+      <ng-template #elseImagen>
+        <img class="imgCarrusel" src="{{imagenURL}}{{publicacion.imagenPortada}}">
+      </ng-template>  
+      <ion-card-content>
+        <h4 style="text-align: left;">Paso2</h4>
+        <hr />
+        <p style="text-align: left;">
+          <strong>descrion</strong>
+        </p>
+      </ion-card-content>
+    </ion-slide>
+  </ion-slides>
 
+  
+
+  <ion-grid>
+    <h3>Mis actividades</h3>
+    <ion-row>
+      <ion-col size="1">
+        <!-- <span class="slider-nav arrow-prev"
+          (click)="slidePrev(sliderTwo,slideWithNav2)">
+          <div class="prev-icon-custom custon-nav"
+            [class.disabled]="sliderTwo.isBeginningSlide"></div>
+        </span> -->
+        <span class="slider-nav arrow-prev"
+          (click)="slidePrev(sliderTwo,slideWithNav2)">
+          <ion-icon color="dark" name="chevron-back-outline"></ion-icon> 
+        </span> 
+      </ion-col>
+      <ion-col size="10">
+
+        <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
+          (ionSlideDidChange)="SlideDidChange(sliderTwo,slideWithNav2)">
+          <ion-slide *ngFor="let s of sliderTwo.slidesItems">
+            <img class="imgCarrusel" src="{{s.image}}">
+          </ion-slide>
+        </ion-slides>
+
+      </ion-col>
+      <ion-col size="1">
+        <span class="slider-nav arrow-next"
+          (click)="slideNext(sliderTwo,slideWithNav2)">
+          <div class="next-icon-custom custon-nav"
+            [class.disabled]="sliderTwo.isEndSlide"></div>
+        </span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+ 
+  <ion-list>
+    <ion-item *ngFor="let s of listaAdmin" (click)="presentImage(s.id)" routerLink="#">
+      <ion-thumbnail slot="start">
+        <img *ngIf="s.photo" src="{{s.photo}}" />
+        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 ion-text color="primary">{{s.name}}</h3>
+        <p>{{s.direccion}}</p>
+        <p>$ {{s.precio}}</p>
+      </ion-label>
+      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
+    </ion-item>
+  </ion-list>
+ 
   <popmenu></popmenu>
 </ion-content>
   

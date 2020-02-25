@@ -7,6 +7,10 @@ import { IonicModule } from '@ionic/angular';
 
 import { ImagePage } from './image.page';
 
+import { IonicRatingModule } from "ionic4-rating";
+// map cordova
+import { GoogleMaps } from '@ionic-native/google-maps';
+
 const routes: Routes = [
   {
     path: '',
@@ -19,7 +23,11 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    IonicRatingModule,
     RouterModule.forChild(routes)
+  ],
+  providers:[
+    GoogleMaps
   ],
   declarations: [ImagePage],
   entryComponents: [ImagePage]

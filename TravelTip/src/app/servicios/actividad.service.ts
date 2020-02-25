@@ -43,6 +43,18 @@ export class ActividadService {
   //     }));
   // }
 
+  getAllActividadesCreadas() {
+    this.actividadesCollection = this.afs.collection('Actividades', ref => ref.where('estado', '==', '0'));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
   getOneActividad(idActividad: string) {
     this.actividadDoc = this.afs.doc<Actividad>(`Actividades/${idActividad}`);
     return this.actividad = this.actividadDoc.snapshotChanges().pipe(map(action => {

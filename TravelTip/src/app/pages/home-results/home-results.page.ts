@@ -5,7 +5,8 @@ import {
   MenuController,
   ToastController,
   PopoverController,
-  ModalController } from '@ionic/angular';
+  ModalController,
+  IonSlides } from '@ionic/angular';
 
 // Modals
 import { SearchFilterPage } from '../../pages/modal/search-filter/search-filter.page';
@@ -18,6 +19,12 @@ import { NotificationsComponent } from './../../components/notifications/notific
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { ActividadService } from 'src/app/servicios/actividad.service';
+import { AuthService } from 'src/app/servicios/auth.service';
+import { Usuario } from 'src/app/models/usuario.model';
+import { UserService } from 'src/app/servicios/user.service';
+import { Actividad } from 'src/app/models/actividad.model ';
+
+
 
 
 declare var google;
@@ -29,6 +36,31 @@ declare var google;
 })
 export class HomeResultsPage {
   @ViewChild('map') mapElement: ElementRef;
+  
+  // @ViewChild('slideWithNav') slideWithNav: Slides;
+  @ViewChild('slideWithNav2') slideWithNav2: IonSlides;
+  @ViewChild('slideWithNav3') slideWithNav3: IonSlides;
+ 
+  // sliderOne: any;
+  sliderTwo: any;
+  sliderThree: any;
+ 
+ 
+ 
+  //Configuration for each Slider
+  slideOptsThree = {
+    initialSlide: 0,
+    slidesPerView: 3
+  };
+ 
+  slideOptsTwo = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true
+  };
+  
+  
   map: any;
   address:string;
 
@@ -36,6 +68,14 @@ export class HomeResultsPage {
   yourLocation = 'Prueba Calle 123';
   themeCover = 'assets/img/ionic4-Start-Theme-cover.jpg';
 
+  public isInvitado: any = null;
+  public isAdmin: any = null;
+  public userUid: string = null;
+
+  private userAct : Usuario = {};  
+
+  private listaAdmin: Actividad[];
+  
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -45,16 +85,133 @@ export class HomeResultsPage {
     public toastCtrl: ToastController,
     public geolocation:Geolocation,
     private nativeGeocoder:NativeGeocoder,
-    private actividadSvr:ActividadService
+    private actividadSvr:ActividadService,
+    private authservice :AuthService,
+    private userService : UserService
   ) {
+    //user act
+    this.authservice.isAuth().subscribe(auth => {
+      if (auth) {
+        this.userUid = auth.uid;
+        console.log("auth",auth);
+        
+        this.userService.getOneUser(this.userUid).subscribe(userdb => {
+          this.userAct = userdb;
+          this.userAct.photoUrl = auth.photoURL;
+          console.log("userDb",userdb);
+        
+        });
+        
+        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
+          this.isInvitado = Object.assign({}, userRole.roles).hasOwnProperty('invitado');
+        })
+        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
+          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+        })
+      }
+    })
+    //Item object for Food
+    this.sliderTwo =
+      {
+        isBeginningSlide: true,
+        isEndSlide: false,
+        slidesItems: [
+          {
+            id: 1,
+            image: 'assets/img/6.jpg'
+          },
+          {
+            id: 2,
+            image: 'assets/img/7.jpg'
+          },
+          {
+            id: 3,
+            image: 'assets/img/10.jpg'
+          },
+          {
+            id: 4,
+            image: 'assets/img/12.jpg'
+          },
+          {
+            id: 5,
+            image: 'assets/img/11.jpg'
+          }
+        ]
+      };
+      //Item object for Fashion
+    this.sliderThree =
+    {
+      isBeginningSlide: true,
+      isEndSlide: false,
+      slidesItems: [
+        {
+          id: 6,
+          image: 'assets/img/6.jpg'
+        },
+        {
+          id: 7,
+          image: 'assets/img/7.jpg'
+        },
+        {
+          id: 8,
+          image: 'assets/img/10.jpg'
+        },
+        {
+          id: 9,
+          image: 'assets/img/12.jpg'
+        },
+        {
+          id: 10,
+          image: 'assets/img/11.jpg'
+        }
+      ]
+    };
+  }
 
+  //Move to Next slide
+  slideNext(object, slideView) {
+    slideView.slideNext(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });
+  }
+ 
+  //Move to previous slide
+  slidePrev(object, slideView) {
+    slideView.slidePrev(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });;
+  }
+ 
+  //Method called when slide is changed by drag or navigation
+  SlideDidChange(object, slideView) {
+    this.checkIfNavDisabled(object, slideView);
+  }
+ 
+  //Call methods to check if slide is first or last to enable disbale navigation  
+  checkIfNavDisabled(object, slideView) {
+    this.checkisBeginning(object, slideView);
+    this.checkisEnd(object, slideView);
+  }
+ 
+  checkisBeginning(object, slideView) {
+    slideView.isBeginning().then((istrue) => {
+      object.isBeginningSlide = istrue;
+    });
+  }
+  checkisEnd(object, slideView) {
+    slideView.isEnd().then((istrue) => {
+      object.isEndSlide = istrue;
+    });
   }
 
   ngOnInit() {
     this.loadMap();
     this.actividadSvr.getAllactividades().subscribe(actividades =>{
-      debugger;
       console.log(actividades);
+    });
+    this.actividadSvr.getAllActividadesCreadas().subscribe( l =>{
+      this.listaAdmin= l;
+      console.log("lista para adm",this.listaAdmin);
     });
     
     
@@ -93,7 +250,6 @@ export class HomeResultsPage {
     this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
       .then((result: NativeGeocoderResult[]) => {
         this.address = "";
-        debugger;
         let responseAddress = [];
         for (let [key, value] of Object.entries(result[0])) {
           if(value.length>0)
