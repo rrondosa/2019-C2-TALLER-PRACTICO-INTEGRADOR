@@ -10,12 +10,14 @@ import {
 // Modals
 import { SearchFilterPage } from '../../pages/modal/search-filter/search-filter.page';
 import { ImagePage } from './../modal/image/image.page';
+import { CrearActividadPage } from '../../pages/modal/crear-actividad/crear-actividad.page';
 // Call notifications test by Popover and Custom Component.
 import { NotificationsComponent } from './../../components/notifications/notifications.component';
 
 // geolocation
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+import { ActividadService } from 'src/app/servicios/actividad.service';
 
 
 declare var google;
@@ -42,13 +44,20 @@ export class HomeResultsPage {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public geolocation:Geolocation,
-    private nativeGeocoder:NativeGeocoder
+    private nativeGeocoder:NativeGeocoder,
+    private actividadSvr:ActividadService
   ) {
 
   }
 
   ngOnInit() {
     this.loadMap();
+    this.actividadSvr.getAllactividades().subscribe(actividades =>{
+      debugger;
+      console.log(actividades);
+    });
+    
+    
   }
 
   loadMap() {
@@ -157,7 +166,12 @@ export class HomeResultsPage {
     });
     return await modal.present();
   }
-
+  async addActividad () {
+    const modal = await this.modalCtrl.create({
+      component: CrearActividadPage
+    });
+    return await modal.present();
+  }
   
 
   async presentImage(image: any) {

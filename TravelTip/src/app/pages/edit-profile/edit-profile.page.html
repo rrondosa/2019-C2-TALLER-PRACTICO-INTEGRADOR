@@ -9,15 +9,15 @@
 
 <ion-content class="profile">
   <ion-card no-margin> 
-    <ion-card-content class="bg-profile" [hidden]="isInvitado">
+    <ion-card-content class="bg-profile" [hidden]="isInvitado" >
       
         <label for="file-input">
-          <img *ngIf="userAct.photoUrl && !isInvitado" src="{{userAct.photoUrl}}" id="imgPerfil">
-          <img *ngIf="!userAct.photoUrl && !isInvitado" src="assets/img/avatar.png" />
-          <img *ngIf="isInvitado" src="assets/img/logo_blanco.png" />
+          <img *ngIf="userAct.photoUrl" src="{{userAct.photoUrl}}" id="imgPerfil"/>
+          <img *ngIf="!userAct.photoUrl" src="assets/img/avatar.png" />
         </label>
-        <input *ngIf="isInvitado" id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
+        <input  id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
       <p color="light" class="fw100">(toca sobre la imagen para editar)</p>
+     
       <h1 class="text08">{{userAct.nombre}} {{userAct.apellido}}</h1>
       <h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2>
       

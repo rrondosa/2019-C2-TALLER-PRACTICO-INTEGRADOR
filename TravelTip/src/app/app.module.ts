@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 // Modal Pages
 import { ImagePageModule } from './pages/modal/image/image.module';
 import { SearchFilterPageModule } from './pages/modal/search-filter/search-filter.module';
+import { CrearActividadPageModule } from './pages/modal/crear-actividad/crear-actividad.module';
 
 // Components
 import { NotificationsComponent } from './components/notifications/notifications.component';
@@ -48,6 +49,7 @@ import { Camera } from '@ionic-native/camera/ngx';
     HttpClientModule,
     ImagePageModule,
     SearchFilterPageModule,
+    CrearActividadPageModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule, 
     AngularFirestoreModule,

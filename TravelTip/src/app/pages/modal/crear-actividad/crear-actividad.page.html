@@ -1,0 +1,170 @@
+<ion-header>
+	<ion-toolbar color="primary">
+	  <ion-buttons slot="start">
+		  <ion-button color="primary" (click)="closeModal()">
+			  <ion-icon name="close" color="light"></ion-icon>
+		  </ion-button>
+	  </ion-buttons>
+	  <ion-title>
+		  Agregar actividad
+	  </ion-title>
+	</ion-toolbar>
+  </ion-header>
+  
+  
+  <ion-content padding>
+	  <!-- <form [formGroup]="onRegisterForm" class="list-form"> -->
+		  <ion-card-content class="perfil">
+		
+			  <label for="file-input">
+				<img *ngIf="actvidadNva.photo" src="{{actvidadNva.photo}}" id="imgPerfil"/>
+				<img *ngIf="!actvidadNva.photo" src="assets/img/avatar.png" />
+			  </label>
+			  <input  id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
+			<p color="light" class="fw100">(toca sobre la imagen para editar)</p>
+		   
+			<!-- <h1 class="text08">{{userAct.nombre}} {{userAct.apellido}}</h1>
+			<h2 color="light" margin-bottom>{{userAct.tipoCliente}}</h2> -->
+			
+			<ion-button icon-left color="secondary" (click)="takePicture()" >
+			  <ion-icon name="camera"></ion-icon> 
+			  Tomar foto
+			</ion-button>
+		  
+		  </ion-card-content>
+		  <ion-item no-padding class="animated fadeInUp">
+			  <ion-label position="floating">
+				Nombre
+			  </ion-label>
+			  <ion-input inputmode="text"   [(ngModel)]="nombre"></ion-input>
+		  </ion-item>
+		  
+		  <ion-item no-padding class="animated fadeInUp">
+			<ion-label position="floating">
+			  Calificación
+			</ion-label><br/>
+			<rating [(ngModel)]="actvidadNva.rating"    readonly="false" size="default" (ngModelChange)="onRateChange($event)"> </rating>
+		</ion-item>
+		  
+		  <!-- <p ion-text class="text08" *ngIf="onRegisterForm.get('nombre').touched && onRegisterForm.get('nombre').hasError('required')">
+			  <ion-text color="warning">
+				Este campo es requerido
+			  </ion-text>
+		  </p> -->
+		  <ion-item  no-padding class="animated fadeInUp">
+			  <ion-label>Tipo actividad</ion-label>
+			  <ion-select [(ngModel)]="tipoAct"  
+				  multiple="false" placeholder="Elije un opción..."
+				  [selectedText]="tipoAct ? tipoAct.toString() : tipoAct"
+				  (ionChange)="codeSelected($event)" required >
+					  
+					  <ion-select-option [value]="h">Hospedaje</ion-select-option>
+					  <ion-select-option [value]="a">Actividad</ion-select-option>
+					  <ion-select-option [value]="t">Transporte</ion-select-option>
+				</ion-select>
+		  </ion-item>
+		  <ion-item *ngIf="tipoAct=='Hospedaje'" no-padding class="animated fadeInUp">
+			  <ion-label>Cant. amb.</ion-label>
+			  <ion-select [(ngModel)]="amb"  
+				  multiple="false" placeholder="Elije un opción..."
+				  [selectedText]="amb ? amb.toString() : amb"
+				  (ionChange)="codeSelectedAmb($event)" required >
+					  
+					  <ion-select-option [value]="h">1 amb</ion-select-option>
+					  <ion-select-option [value]="a">2 amb</ion-select-option>
+					  <ion-select-option [value]="t">3 amb</ion-select-option>
+				</ion-select>
+				
+			  
+		  </ion-item>
+		  <ion-item *ngIf="tipoAct=='Actividad'" no-padding class="animated fadeInUp">
+			  <ion-item no-padding class="animated fadeInUp">
+				  <ion-label position="floating">
+					<!-- <ion-icon name="direccion" item-start></ion-icon> -->
+					Descripción
+				  </ion-label>
+				  <ion-input inputmode="text"  [(ngModel)]="description"></ion-input>
+			  </ion-item>
+				
+			  
+		  </ion-item>
+		  <ion-item *ngIf="tipoAct=='Transporte'" no-padding class="animated fadeInUp">
+			  <ion-item no-padding class="animated fadeInUp">
+				  <ion-label position="floating">
+					<!-- <ion-icon name="direccion" item-start></ion-icon> -->
+					Patente
+				  </ion-label>
+				  <ion-input inputmode="text"  [(ngModel)]="patente"></ion-input>
+			  </ion-item>
+				
+			  
+		  </ion-item>
+  
+		  
+		  <ion-item no-padding class="animated fadeInUp">
+			<ion-label position="floating">
+			  <ion-icon name="logo-usd" item-start></ion-icon>
+			  Precio
+			</ion-label>
+			<ion-input type="number"   [(ngModel)]="precio" required></ion-input>
+		  </ion-item>
+		  
+  
+		  <ion-item no-padding class="animated fadeInUp">
+			<ion-label position="floating">
+			  <ion-icon name="call" item-start></ion-icon>
+			  Teléfono
+			</ion-label>
+			<ion-input type="text"   [(ngModel)]="tel" required></ion-input>
+		  </ion-item>
+
+		  <!-- <p ion-text class="text08" *ngIf="onRegisterForm.get('tel').touched && onRegisterForm.get('tel').hasError('required')">
+			<ion-text color="warning">
+			  Este campo es requerido
+			</ion-text>
+		  </p> -->
+	
+		  <ion-item no-padding class="animated fadeInUp">
+			<ion-label position="floating">
+			  Página web
+			</ion-label>
+			<ion-input  inputmode="text"   [(ngModel)]="web" required></ion-input>
+		  </ion-item>
+		  <!-- <p ion-text color="warning" class="text08" *ngIf="onRegisterForm.get('web').touched && onRegisterForm.get('web').hasError('required')">
+			<ion-text color="warning">
+			  Este campo es requerido
+			</ion-text>
+		  </p> -->
+		  
+		  <ion-item no-padding class="animated fadeInUp">
+			  <ion-label position="floating">
+				<!-- <ion-icon name="direccion" item-start></ion-icon> -->
+				Direccion
+			  </ion-label>
+			  <ion-input inputmode="text" [(ngModel)]="direccion"></ion-input>
+  
+		  </ion-item>
+		  <ion-searchbar [(ngModel)]="search" placeholder="Ingrese la direccion" (ionChange)="searchChanged()"></ion-searchbar>
+		  <ion-list  [hidden]="!search.length"  class="ion-margin-horizontal" autocomplete> 
+			<ion-item *ngFor="let result of searchResults" (click)="selcionarDire($event, result)">
+			  <ion-icon name="pin" slot="start"></ion-icon>
+			  <ion-label>{{result.description}}</ion-label>
+			</ion-item>
+		  </ion-list>
+  
+		  
+	  
+		<!-- </form> -->
+		<div text-center margin-top>
+		  <ion-button icon-left size="medium" expand="full" shape="round" color="primary" (click)="sendData()"
+			tappable>
+			<ion-icon name="add"></ion-icon>
+			Agregar
+		  </ion-button>
+		  
+		</div>
+		
+
+	  <!-- <ion-button expand="full" color="primary" (click)="closeModal()">Filter Results</ion-button> -->
+  </ion-content>
+  
