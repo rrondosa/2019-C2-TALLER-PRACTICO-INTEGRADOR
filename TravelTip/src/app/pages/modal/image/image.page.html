@@ -11,16 +11,19 @@
 <ion-content>
   <!-- <img [src]="value"> -->
 
-  <ion-slide center *ngFor="let place of places">
+  <ion-slide center>
     <ion-card>
-      <ion-img style="height: 300px;" [src]="place.photo"></ion-img>
+      
+
+      <ion-img style="height: 300px;" [src]="actividad.photo"></ion-img>
       <ion-card-header>
         <ion-card-subtitle>{{actividad.direccion}}</ion-card-subtitle>
         <ion-card-title>{{actividad.name}}  {{actividad.distanciaM}}</ion-card-title>
       </ion-card-header>
-      <!-- <ion-card-content>
+      
+      <ion-card-content>
         <ion-row>
-          <ion-col col-10><div class="rate_div"><rating [rate]="place.rating"  readonly="true" ></rating></div></ion-col>
+          <ion-col col-10><div class="rate_div"><rating [rate]="actividad.rating"  readonly="true" ></rating></div></ion-col>
           <ion-col col-2>{{actividad.rating}}</ion-col>
           
         </ion-row>
@@ -58,7 +61,7 @@
           </ion-row>
         </ion-grid>
 
-      </ion-card-content> -->
+      </ion-card-content>
     </ion-card>
   </ion-slide>
 </ion-content>
