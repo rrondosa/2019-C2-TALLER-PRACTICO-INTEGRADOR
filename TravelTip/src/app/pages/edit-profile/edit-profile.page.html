@@ -118,23 +118,32 @@
       </ion-row>
     </ion-grid>
     
-    <div padding [hidden]="!isInvitado">
-    <ion-text color="dark" style="font-size: larger;" no-margin>
-      ¡El mejor compañero de viaje que te ayuda a mejorar tu experiencia! Nuestra aplicación TRAVELHINTS encontrarás en ayuda para buscar tu traslado a tu hospedaje, si el hotel en cual te reservaste no es lo esterabas te daremos opciones cercanas a tu ubicación, sabemos que quieres ver lo máximo posible de la zona local por eso te daremos opciones de excursiones, lugares para disfrutar de la gastronomía del lugar y ¡mucho más!
-    </ion-text>
+    
+    <!-- <ion-card no-margin [hidden]="isInvitado" >  -->
+      <ion-button  [hidden]="isInvitado" size="large" expand="full" color="dark" (click)="sendData()"  no-margin>
+        <ion-icon name="save"></ion-icon>
+        Editar
+      </ion-button>
+    
+    <!-- </ion-card> -->
+    
+    
+      
+      <ion-row>
+        <ion-text color="dark" style="font-size: larger;"  [hidden]="!isInvitado" >
+        ¡El mejor compañero de viaje que te ayuda a mejorar tu experiencia! Nuestra aplicación TRAVELHINTS encontrarás en ayuda para buscar tu traslado a tu hospedaje, si el hotel en cual te reservaste no es lo esterabas te daremos opciones cercanas a tu ubicación, sabemos que quieres ver lo máximo posible de la zona local por eso te daremos opciones de excursiones, lugares para disfrutar de la gastronomía del lugar y ¡mucho más!
+          </ion-text>  
+      </ion-row>  
+      
+   
     <ion-button [hidden]="!isInvitado"   size="large" expand="full" color="dark" (click)="goToRegister()"  no-margin>
       <ion-icon name="log-in"></ion-icon>Registarse
     </ion-button>
-    </div>
-    <ion-card no-margin> 
-    <ion-button [hidden]="isInvitado" size="large" expand="full" color="dark" (click)="sendData()"  no-margin>
-      <ion-icon name="save"></ion-icon>
-      Editar</ion-button>
-    <!-- <ion-button size="large" expand="full" color="dark"  type="submit" no-margin>Editar</ion-button> -->
-    </ion-card>
-    <!-- </form> -->
     
+
   </ion-card>
-  
+  <!-- <ion-card no-margin [hidden]="!isInvitado" > -->
+    
+  <!-- </ion-card>  -->
   
 </ion-content>
