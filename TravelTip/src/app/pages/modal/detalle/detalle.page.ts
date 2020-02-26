@@ -19,18 +19,18 @@ import { finalize } from 'rxjs/operators';
 declare var google;
 
 @Component({
-  selector: 'app-image',
-  templateUrl: './image.page.html',
-  styleUrls: ['./image.page.scss'],
+  selector: 'app-detalle',
+  templateUrl: './detalle.page.html',
+  styleUrls: ['./detalle.page.scss'],
 })
-export class ImagePage implements OnInit {
+export class DetallePage implements OnInit {
   @Input() value: any;
-  public image: any;
+  public detalle: any;
   lat;lng;
   value2: any;
   actividad :Actividad={};
   public URLDrive ="https://www.google.com/maps/dir/?api=1";
-  editar=false;
+  ok=false;
 
 
   public isInvitado: any = null;
@@ -97,31 +97,15 @@ export class ImagePage implements OnInit {
   }
 
   ngOnInit() {
-    // this.image = this.sanitizer.bypassSecurityTrustStyle(this.value);
-    this.editar=false;
+    // this.detalle = this.sanitizer.bypassSecurityTrustStyle(this.value);
+    this.ok=false;
     debugger;
     console.log(this.value);
     this.actividadSrv.getOneActividad(this.value).subscribe(a=>{
       this.actividad =a;
       console.log(this.actividad);
       this.forwardGeocode(this.actividad.direccion);
-      
-      console.log(this.actividad);
-      
-      if(this.actividad.tipo.actividad){
-        this.tipoAct="Excursión";
-      }
-      if(this.actividad.tipo.transporte){
-        this.tipoAct="Transporte";
-      }
-      if(this.actividad.tipo.hospedaje){
-        this.tipoAct="Hospedaje";
-        this.amb="2 personas";
-      }
-      if(this.actividad.tipo.gastronomia){
-        this.tipoAct="Gastronomía";
-      }
-      
+            
     });
     
   }
@@ -163,11 +147,15 @@ export class ImagePage implements OnInit {
     this.actividad.drive = this.URLDrive+"&destination="+a+","+b+"&travelmode=transit";
   }
   
-  editarActividad() {
-    this.editar=true;
+  rechazarActividad() {
+    this.actividad.estado="3";
+    this.actividadService.updateActividad(this.actividad);
+    this.ok=false;
+    console.log("actididad mod  ", this.actividad);
   }
-  async saveActividad() {
-    this.editar=false;
+
+  async actidadOk() {
+  
     
     const loader = await this.loadingCtrl.create({
       duration: 2000
@@ -175,26 +163,11 @@ export class ImagePage implements OnInit {
 
     loader.present();
     debugger;
-
-    // switch(this.tipoAct) {
-    //   case "Hospedaje":
-    //     this.actividad.tipo.hospedaje = this.amb;
-    //     break;
-    //   case "Excursión":
-    //     this.actividad.tipo.actividad = this.description;
-    //     break;
-    //   case "Gastronomía":
-    //     this.actividad.tipo.gastronomia = this.description;
-    //     break;
-    //   case "Transporte":
-    //     this.actividad.tipo.transporte = this.patente;
-    //     break;
-    // }
-    this.actividad.estado="0";
-    console.log("nvaaaaa----->", this.actividad);
-   
-    this.actividadService.updateActividad(this.actividad);
     
+    this.actividad.estado="1";
+    this.actividadService.updateActividad(this.actividad);
+    console.log("actididad mod  estado 1 ", this.actividad);
+    this.ok=true;
     loader.onWillDismiss().then(async l => {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,
@@ -203,7 +176,7 @@ export class ImagePage implements OnInit {
         duration: 3000,
         position: 'middle'
       });
-      this.editar=false;
+      this.ok=false;
       toast.present();
       this.closeModal();
       
@@ -212,9 +185,7 @@ export class ImagePage implements OnInit {
 
 
   }
-  cancelarSave(){
-    this.editar=false;
-  }
+ 
   borrarActividad(){
     this.actividadService.deleteActividad(this.value);
     this.closeModal();
@@ -222,32 +193,7 @@ export class ImagePage implements OnInit {
   closeModal() {
     this.modalCtrl.dismiss();
   }
-  searchChanged(){
-    if(!this.search.trim().length) return;
 
-    this.googleAutocomplete.getPlacePredictions({input: this.search}, predictions =>{
-      this.zone.run(()=>{
-        this.searchResults = predictions;
-        console.log(this.searchResults);
-        
-      });
-      
-
-    });
-  }
-  selcionarDire(e, result){
-    this.actividad.direccion=result.description; 
-    this.search = "";    
-  }
-
-  codeSelected(v){
-    console.log("ddsdsds",v.target.value);
-    this.tipoAct=v.target.value;
-  }
-
-  codeSelectedAmb(e){
-    this.amb=e.target.value;
-  }
 
   // para la foto
   onFileChanged(e) {
@@ -291,11 +237,11 @@ export class ImagePage implements OnInit {
       sourceType: this.camera.PictureSourceType.CAMERA
     };
     this.camera.getPicture(options)
-    .then((imageData) => {
-      console.log(imageData);
-      // this.image = this.webView.convertFileSrc(imageData);
-      this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
-      // this.captureDataUrl = imageData;
+    .then((detalleData) => {
+      console.log(detalleData);
+      // this.detalle = this.webView.convertFileSrc(detalleData);
+      this.captureDataUrl = 'data:detalle/jpeg;base64,' + detalleData;
+      // this.captureDataUrl = detalleData;
       
       console.log(this.captureDataUrl);
       
@@ -313,13 +259,13 @@ export class ImagePage implements OnInit {
 	
     const filename = Math.floor(Date.now() / 1000);
 
-    // Create a reference to 'images/todays-date.jpg'
+    // Create a reference to 'detalles/todays-date.jpg'
     const metadata = {
-      contentType: 'image/jpeg'
+      contentType: 'detalle/jpeg'
     };
-    const imageRef = storageRef.child(`Actividades/profile_${this.userUid}/${filename}.jpg`);
+    const detalleRef = storageRef.child(`Actividades/profile_${this.userUid}/${filename}.jpg`);
 
-    imageRef.putString(this.captureDataUrl, firebase.storage.StringFormat.DATA_URL ).then((snapshot)=> {
+    detalleRef.putString(this.captureDataUrl, firebase.storage.StringFormat.DATA_URL ).then((snapshot)=> {
         // Do something here when the data is succesfully uploaded!
         
         snapshot.ref.getDownloadURL().then(downloadURL=> {

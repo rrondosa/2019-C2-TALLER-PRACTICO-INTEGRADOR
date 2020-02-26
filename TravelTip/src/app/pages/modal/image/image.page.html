@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button size="small" shape="round" (click)="closeModal()" color="tertiary">
-        <ion-icon slot="start" name="close"></ion-icon> Close
+        <ion-icon slot="start" name="close"></ion-icon> Cerrar
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,7 +21,7 @@
       </ion-item>
       <ion-item>
         <ion-icon name="pin" slot="start"></ion-icon>
-        <ion-button fill="outline" slot="end" href="{{actividad.drive}}" color="primary">Ir</ion-button>
+        <ion-button fill="outline" slot="end" href="{{actividad.drive}}" color="primary"  [hidden]="actividad.drive">Ir</ion-button>
         <ion-label>{{actividad.direccion}}</ion-label>
       </ion-item>
       <ion-item>
@@ -97,7 +97,7 @@
       
       
     </ion-item>
-    <ion-item *ngIf="tipoAct=='Excursión' || tipoAct=='Gastronomía'" no-padding class="animated fadeInUp">
+    <ion-item *ngIf="tipoAct=='Excursión'" no-padding class="animated fadeInUp">
         <ion-label position="floating">
         Descripción
         </ion-label>

@@ -12,6 +12,7 @@ import {
 import { SearchFilterPage } from '../../pages/modal/search-filter/search-filter.page';
 import { ImagePage } from './../modal/image/image.page';
 import { CrearActividadPage } from '../../pages/modal/crear-actividad/crear-actividad.page';
+import { DetallePage } from '../../pages/modal/detalle/detalle.page';
 // Call notifications test by Popover and Custom Component.
 import { NotificationsComponent } from './../../components/notifications/notifications.component';
 
@@ -74,8 +75,11 @@ export class HomeResultsPage {
 
   private userAct : Usuario = {};  
 
-  private listaAdmin: Actividad[];
-  
+  private listaAdmin0: Actividad[];
+  private listaAdmin1: Actividad[];
+  private listaUser0: Actividad[];
+  private listaUser3: Actividad[];
+
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -204,15 +208,34 @@ export class HomeResultsPage {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadMap();
     this.actividadSvr.getAllactividades().subscribe(actividades =>{
       console.log(actividades);
     });
     this.actividadSvr.getAllActividadesCreadas().subscribe( l =>{
-      this.listaAdmin= l;
-      console.log("lista para adm",this.listaAdmin);
+      this.listaAdmin0= l;
+      console.log("lista para adm 0 ",this.listaAdmin0);
     });
+
+    this.actividadSvr.getAllActividadesOk().subscribe(l=>{
+      this.listaAdmin1= l;
+      console.log("lista para adm 1",this.listaAdmin1);
+    });
+    debugger;
+    this.authservice.isAuth().subscribe(auth => {
+      if (auth) {
+        this.actividadSvr.getAllActividadesUserCurrentsRechazada(auth.uid).subscribe(l2=>{
+          this.listaUser3= l2;
+          console.log("lista para user 0",this.listaUser3);
+        });
+        this.actividadSvr.getAllActividadesUserCurrentsCreadas(auth.uid).subscribe(l2=>{
+          this.listaUser0= l2;
+          console.log("lista para user 3",this.listaUser0);
+        });
+      }
+    })
+    
     
     
   }
@@ -333,6 +356,13 @@ export class HomeResultsPage {
   async presentImage(image: any) {
     const modal = await this.modalCtrl.create({
       component: ImagePage,
+      componentProps: { value: image }
+    });
+    return await modal.present();
+  }
+  async detalleAdm(image: any) {
+    const modal = await this.modalCtrl.create({
+      component: DetallePage ,
       componentProps: { value: image }
     });
     return await modal.present();

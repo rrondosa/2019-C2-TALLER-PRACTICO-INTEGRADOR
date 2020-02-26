@@ -1,56 +1,44 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <!-- <ion-buttons slot="start">
-      <ion-menu-button color="secondary"></ion-menu-button>
-    </ion-buttons> -->
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home-results"></ion-back-button>
+     </ion-buttons>
     <ion-title>
         <ion-text color="light">
-          <ion-text color="light" class="fw700">Actividades</ion-text>
+          <ion-text color="light" class="fw700">Actididades</ion-text>
         </ion-text>
     </ion-title>
-    <!-- <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="medium" (click)="notifications()">
-        <ion-icon name="notifications"></ion-icon>
-        <ion-badge color="dark" slot="end">2</ion-badge>
-      </ion-button>
-    </ion-buttons> -->
+
   </ion-toolbar>
-  <!-- <ion-toolbar color="dark">
-    <ion-searchbar [(ngModel)]="searchKey"></ion-searchbar>
+  <ion-toolbar color="dark">
+    <ion-searchbar [(ngModel)]="search" placeholder="Para donde?" (ionChange)="searchChanged()"></ion-searchbar>
+    
     <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
+      <!-- <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
         <ion-icon name="options"></ion-icon>
+      </ion-button> -->
+      <ion-button size="small" shape="round" color="medium" (click)="goReceiver()">
+        <ion-icon name="list"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar> -->
+  </ion-toolbar>
+
+  <ion-list  [hidden]="!search.length"  class="ion-margin-horizontal" autocomplete> 
+    <ion-item *ngFor="let result of searchResults" (click)="redirecionarMaker($event, result)">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>{{result.description}}</ion-label>
+    </ion-item>
+  </ion-list>
+  
   
 </ion-header>
 
 <ion-content>
-  <ion-card no-margin class="no-radius">
-    <ion-item lines="none" color="medium">
-      <ion-label>
-        <h2 no-margin class="fw500 no-margin">
-          <ion-icon name="locate"></ion-icon>
-          <ion-text color="dark">Ubicación</ion-text>
-        </h2>
 
-          <ion-text  color="primary">
-            {{userCity}}
-          </ion-text>
-      
-      </ion-label>
-    </ion-item>
-  </ion-card>
 
-  <div #map id="map"></div>
-  <ion-list>
-    <ion-item *ngFor="let place of places">
-      <ion-label><p>{{place.name}}</p></ion-label>
-      
-      <div class="rate_div"><rating [rate]="place.rating"  readonly="true" ></rating></div>
-         
-    </ion-item>
-  </ion-list>
+  
+    <div #map id="map"></div>
+  
 
 </ion-content>

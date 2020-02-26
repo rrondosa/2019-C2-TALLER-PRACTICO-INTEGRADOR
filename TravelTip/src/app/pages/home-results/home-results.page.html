@@ -10,10 +10,10 @@
         </ion-text>
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="medium" (click)="notifications()">
+      <!-- <ion-button size="small" shape="round" color="medium" (click)="notifications()">
         <ion-icon name="notifications"></ion-icon>
         <ion-badge color="dark" slot="end">2</ion-badge>
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="dark">
@@ -41,6 +41,7 @@
 </ion-header>
 
 <ion-content>
+
   <ion-card no-margin class="no-radius">
     <ion-item lines="none" color="medium">
       <ion-label>
@@ -70,31 +71,36 @@
     Modal 2: Search Filter
   </ion-button> -->
   
- 
+  <ion-card no-margin class="no-radius">
 
-  
+    
   <h3>Mis favoritos</h3>
   <ion-slides class="sel" pager="true">
     <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
-    <ion-slide center *ngFor="let s of sliderTwo.slidesItems">
-      <div *ngIf="s.image; else elseImagen">
-        <img class="imgCarrusel" src="{{s.image}}">
+    <!-- <ion-slide center *ngFor="let s of sliderTwo.slidesItems"> -->
+    <ion-slide center *ngFor="let s of listaAdmin1">
+      <div *ngIf="s.photo; else elseImagen">
+        <img class="imgCarrusel" src="{{s.photo}}">
       </div>
       <ng-template #elseImagen>
         <img class="imgCarrusel" src="{{imagenURL}}{{publicacion.imagenPortada}}">
       </ng-template>  
       <ion-card-content>
-        <h4 style="text-align: left;">Hotel</h4>
+        <h4 style="text-align: left;">{{s.name}}</h4>
         <hr />
         <p style="text-align: left;">
-          <strong>descripcion</strong>
+          <strong>{{s.direccion}}</strong>
         </p>
       </ion-card-content>
     </ion-slide>
   </ion-slides>
+</ion-card>
 
+<ion-card no-margin class="no-radius">
+  <h3>Mis actividades User</h3>
   <ion-list>
-    <ion-item *ngFor="let s of listaAdmin" (click)="presentImage(s.id)" >
+    <ion-item *ngFor="let s of listaUser0" (click)="presentImage(s.id)" >
+      <!-- {{s.uid_creador}}<br>{{s.estado}} -->
       <ion-thumbnail slot="start">
         <img *ngIf="s.photo" src="{{s.photo}}" />
         <img *ngIf="!s.photo" src="assets/img/avatar.png" />
@@ -106,9 +112,62 @@
       </ion-label>
       <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
     </ion-item>
-  </ion-list>
-  
 
+  </ion-list>
+  rechazados
+  <ion-list>
+    <ion-item *ngFor="let s of listaUser3" (click)="presentImage(s.id)" >
+      <!-- {{s.uid_creador}}<br>{{s.estado}} -->
+      <ion-thumbnail slot="start">
+        <img *ngIf="s.photo" src="{{s.photo}}" />
+        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 ion-text color="primary">{{s.name}}</h3>
+        <p>{{s.direccion}}</p>
+        <p>$ {{s.precio}}</p>
+      </ion-label>
+      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
+    </ion-item>
+
+  </ion-list>
+</ion-card>
+<ion-card no-margin class="no-radius">
+  <h3>Actividades admin </h3>
+  <ion-list>
+    <ion-item *ngFor="let s of listaAdmin" (click)="detalleAdm(s.id)" >
+      <ion-thumbnail slot="start">
+        <img *ngIf="s.photo" src="{{s.photo}}" />
+        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 ion-text color="primary">{{s.name}}</h3>
+        <p>{{s.direccion}}</p>
+        <p>$ {{s.precio}}</p>
+      </ion-label>
+      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
+    </ion-item>
+
+  </ion-list>
+</ion-card>
+<ion-card no-margin class="no-radius">
+  <h3>Actividades ok todas </h3>
+  <ion-list>
+    <ion-item *ngFor="let s of lista1" (click)="detalleAdm(s.id)" >
+      <ion-thumbnail slot="start">
+        <img *ngIf="s.photo" src="{{s.photo}}" />
+        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 ion-text color="primary">{{s.name}}</h3>
+        <p>{{s.direccion}}</p>
+        <p>$ {{s.precio}}</p>
+      </ion-label>
+      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
+    </ion-item>
+
+  </ion-list>
+</ion-card>
   <!-- <ion-grid>
     <h3>Mis actividades</h3>
     <ion-row>
@@ -143,7 +202,7 @@
  
   
  
-  <popmenu></popmenu>
+  
   <div #map id="map"></div>
 </ion-content>
-  
+<popmenu></popmenu>

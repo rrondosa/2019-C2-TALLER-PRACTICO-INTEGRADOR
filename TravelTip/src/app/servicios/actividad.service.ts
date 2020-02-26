@@ -54,6 +54,58 @@ export class ActividadService {
         });
       }));
   }
+  getAllActividadesOk() {
+    this.actividadesCollection = this.afs.collection('Actividades', ref => ref.where('estado', '==', '1'));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
+  getAllActividadesRechazadas() {
+    this.actividadesCollection = this.afs.collection('Actividades', ref => ref.where('estado', '==', '3'));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
+  getAllActividadesUserCurrentsCreadas(userCurrent:string) {
+    debugger; 
+    this.actividadesCollection = this.afs.collection('Actividades', ref =>
+      // ref.where('estado', '==', '3').where('estado','==','0').where('uid_creador','==',userCurrent));
+      ref.where('uid_creador','==',userCurrent).where('estado','==','0'));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+  getAllActividadesUserCurrentsRechazada(userCurrent:string) {
+    debugger; 
+    this.actividadesCollection = this.afs.collection('Actividades', ref =>
+      // ref.where('estado', '==', '3').where('estado','==','0').where('uid_creador','==',userCurrent));
+      ref.where('uid_creador','==',userCurrent).where('estado', '==', '3'));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
 
   getOneActividad(idActividad: string) {
     this.actividadDoc = this.afs.doc<Actividad>(`Actividades/${idActividad}`);

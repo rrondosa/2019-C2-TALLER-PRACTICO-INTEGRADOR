@@ -190,7 +190,7 @@ export class MapaPruebaPage implements OnInit {
         });
         this.map.animateCamera({
           'target': marker.getPosition(),
-          'zoom': 18
+          'zoom': 14
         });
   
         marker.showInfoWindow();
@@ -207,7 +207,7 @@ export class MapaPruebaPage implements OnInit {
     var request = {
       location: latlng,
       radius: '1000',
-      types: ["lodging","restaurant","pizzeria"]
+      types: ["lodging"]
     }
 
     await this.googlePlace.nearbySearch(request, results =>{

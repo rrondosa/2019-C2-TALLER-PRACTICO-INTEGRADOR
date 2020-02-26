@@ -188,7 +188,7 @@ export class MapTransportePage  implements OnInit {
         });
         this.map.animateCamera({
           'target': marker.getPosition(),
-          'zoom': 18
+          'zoom': 14
         });
   
         marker.showInfoWindow();
@@ -205,7 +205,7 @@ export class MapTransportePage  implements OnInit {
     var request = {
       location: latlng,
       radius: '1000',
-      types: ["taxi_stand","train_station","travel_agency"]
+      types: ["local_government_office","point_of_interest","taxi_stand","train_station","travel_agency","subway_station","bus_station"]
     }
 
     await this.googlePlace.nearbySearch(request, results =>{

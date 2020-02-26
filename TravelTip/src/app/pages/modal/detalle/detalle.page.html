@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button size="small" shape="round" (click)="closeModal()" color="tertiary">
+        <ion-icon slot="start" name="close"></ion-icon> Cerrar Amd
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card [hidden]="editar">
+    <ion-img style="height: 300px;" [src]="actividad.photo"></ion-img>
+      <ion-card-header>
+        <ion-card-subtitle>{{actividad.direccion}}</ion-card-subtitle>
+        <ion-card-title>{{actividad.name}}  {{actividad.distanciaM}}</ion-card-title>
+      </ion-card-header>
+      <ion-item>
+        <div class="rate_div"><rating [rate]="actividad.rating"  readonly="true" ></rating></div>
+        <!-- <ion-label>{{actividad.rating}} estrellas</ion-label> -->
+      </ion-item>
+      <ion-item>
+        <ion-icon name="pin" slot="start"></ion-icon>
+        <ion-button fill="outline" slot="end" href="{{actividad.drive}}" color="primary"  [hidden]="actividad.drive">Ir</ion-button>
+        <ion-label>{{actividad.direccion}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="call" slot="start"></ion-icon>
+        <!-- <ion-button fill="outline" slot="end" href="{{actividad.drive}}" shape="round"color="secondary">Ir ..</ion-button> -->
+        <ion-label>{{actividad.tel}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="globe" slot="start"></ion-icon>
+        <!-- <ion-button fill="outline" slot="end" href="{{actividad.drive}}" shape="round"color="secondary">Ir ..</ion-button> -->
+        <ion-label><a href="{{actividad.web}}">Ir su web</a></ion-label>
+      </ion-item>
+
+      
+  </ion-card>
+
+
+  <ion-grid class="btn-group">
+          
+    <ion-row>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="primary" (click)="actidadOk()">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="primary" (click)="rechazarActividad()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="danger" (click)="borrarActividad()">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,243 +1,413 @@
-import { Component, NgZone , ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
+
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
-import { Platform } from '@ionic/angular';
 
-declare var google;
+// Import classes from maps module
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  LatLng,
+  MarkerOptions,
+  Marker,
+  GoogleMapOptions,
+  Environment,
+  MyLocation,
+  GoogleMapsAnimation,
+  Geocoder,
+  BaseArrayClass,
+  GeocoderResult,
+  ILatLng,
+  MarkerCluster,
+  MarkerIcon,
+  HtmlInfoWindow,
+  Spherical
+} from "@ionic-native/google-maps";
+
+import { Platform, NavController, LoadingController, ModalController } from "@ionic/angular";
+import { PasajeObjService } from '../../servicios/pasaje-obj.service';
+import { Router } from '@angular/router';
+
+// Modals
+import { SearchFilterPage } from '../../pages/modal/search-filter/search-filter.page';
+import { ImagePage } from './../modal/image/image.page';
+import { ActividadService } from 'src/app/servicios/actividad.service';
+
+declare var google:any;
+
 
 @Component({
   selector: 'app-map-actividad',
   templateUrl: './map-actividad.page.html',
   styleUrls: ['./map-actividad.page.scss'],
 })
-export class MapActividadPage  {
+export class MapActividadPage implements OnInit {
 
-  
-  userLocation;
-  userCity;
-  lat;
-  lng;
-  location;
-  latLngResult;
-  userLocationFromLatLng;
-  latlngMaps;
-  places : Array<any> ; 
+  public map: GoogleMap;
+  public markerCluster: MarkerCluster 
+  private loading : any;
+  public search: string ='';
+  myLocation: MyLocation;
+  private googleAutocomplete = new google.maps.places.AutocompleteService();
+  m = document.getElementById('map');
+  private googlePlace = new google.maps.places.PlacesService(this.m);
+  public searchResults = new Array<any>();
+  public places: Array<any> ;
+  public placeDetail: Array<any> ;
 
-  @ViewChild('map') mapContainer: ElementRef;
-  map: any;
-  constructor(public zone: NgZone, public geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, private platform: Platform) {
-    this.initializeApp();
+  public photo="../../assets/imgs/imagenNoDisponible.png";
+  public tel = "+54 11 5993-7736";
+  public web= "https://fb.facebook.com/pages/La-Taquiza-Delivery/403497273029744?fref=ts"; 
+  public dire;
+  public price_level;
+  public horarios= [
+    "Lunes: 8:00 am - 11:00 pm",
+    "Martes: 8:00 am - 11:00 pm",
+    "Miércoles: 8:00 am - 11:00 pm",
+    "Jueves: 8:00 am - 11:00 pm",
+    "Viernes: 8:00 am - 12:00 am",
+    "Sábado: 8:00 am - 12:00 am",
+    "Domingo: 8:00 am - 12:00 am"
+  ];
+  public URLDrive ="https://www.google.com/maps/dir/?api=1";
+  public distancia;
+
+  constructor(
+    public platform: Platform,
+    public nav: NavController,
+    private loadingCtrl:LoadingController,
+    private ngZone: NgZone,
+    private geolocation: Geolocation,
+    private pasajeObjService: PasajeObjService,
+    private router:Router,
+    public modalCtrl: ModalController,
+    private actividadSvr:ActividadService,
+    ) {console.log(google)}    
+   
+
+  async ngOnInit() {
+    await this.platform.ready();
+    await this.loadMap();
+    const latlng  = await this.getLocation();
+    // await this.nearbysearch(latlng);
+    await this.actidadesCuston(latlng);
+
   }
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.getUserLocation();
+ 
+  async loadMap() {
+    Environment.setEnv({
+      'API_KEY_FOR_BROWSER_RELEASE':'AIzaSyCTTx7gaEc-720DHT5jmCAk1Wq7A4k3dlw',
+      'API_KEY_FOR_BROWSER_DEBUG':'AIzaSyCTTx7gaEc-720DHT5jmCAk1Wq7A4k3dlw'
+    });
+    
+    this.loading = await this.loadingCtrl.create({message:'Por favor, aguarde... '});
+    await this.loading.present();
+
+    let mapOptions: GoogleMapOptions = {
+      controls:{
+        zoom:false
+      }
+    };
+
+    this.map = GoogleMaps.create( 'map', mapOptions );
+    
+    try{
+
+      await this.map.one(GoogleMapsEvent.MAP_READY);
+      this.addOriginMarker();
+      
+ 
+    }catch(error){
+      console.log(error);
+    }
+    
+  }
+
+  //se añade un maker original
+  async addOriginMarker(){
+    try {
+      this.myLocation  = await this.map.getMyLocation();
+      const latlng  = await this.getLocation();
+      console.log(this.myLocation);
+
+      await this.map.moveCamera({
+        target: latlng,
+        zoom:16
+      });
+      this.map.addMarkerSync({
+        title:'Usted esta aquí!',
+        icon: 'blue',
+        animation: GoogleMapsAnimation.DROP,
+        position: this.myLocation.latLng
+      });
+    } catch (error) {
+      console.log(error);
+    }finally{
+      this.loading.dismiss();
+    }
+  }
+  
+  private async getLocation() {
+    const rta = await this.geolocation.getCurrentPosition();
+    return {
+      lat: rta.coords.latitude,
+      lng: rta.coords.longitude
+    };
+  }
+
+  searchChanged(){
+    if(!this.search.trim().length) return;
+
+    this.googleAutocomplete.getPlacePredictions({input: this.search}, predictions =>{
+      this.ngZone.run(()=>{
+        this.searchResults = predictions;
+        console.log(predictions);
+        
+      });
+      
+
+    });
+  }
+
+  async redirecionarMaker(e, result){
+    this.loading = await this.loadingCtrl.create({
+      message: 'Por favor, aguarde...'
+    });
+    await this.loading.present();
+    this.map.clear();
+    Geocoder.geocode({
+      "address": result.description
+    })
+    .then((results: GeocoderResult[]) => {
+      console.log(results);
+      this.loading.dismiss();
+  
+      if (results.length > 0) {
+        let marker: Marker = this.map.addMarkerSync({
+          'position': results[0].position,
+          'title':  'Usted esta aquí!',
+          'icon': 'blue'
+        });
+        this.map.animateCamera({
+          'target': marker.getPosition(),
+          'zoom': 18
+        });
+  
+        marker.showInfoWindow();
+        this.search="";
+        this.nearbysearch(results[0].position);
+      } else {
+        alert("Not found");
+      }
+    });
+  }
+  // actidades custom- ini
+  async actidadesCuston(latlng){
+    this.actividadSvr.getAllActividadesOk().subscribe(l=>{
+       
+        console.log('actividades',l);
+        
+        let POINTS: BaseArrayClass<any> = new BaseArrayClass<any>(l);
+        debugger;
+        let bounds: ILatLng[]= POINTS.map((data: any, idx: number) => {
+          console.log('data',data);
+          debugger;
+          let cus_location = {
+            lat: data.position.lat,
+            lng: data.position.lng
+          }
+          debugger;
+          let metrs= Math.round(Spherical.computeDistanceBetween(latlng,cus_location));
+          if(metrs >= 1000 )
+          {
+            let k = metrs*0.001;
+            this.distancia = k+" Km"
+          }else this.distancia=metrs+" m";
+
+          console.log("distancia metros",this.distancia);
+        
+          let a =Math.floor(Math.random() * 4) + 0  ;
+          switch(a){
+            case 0:
+              this.price_level="Gratis";
+              break;
+            case 1:
+              this.price_level="Barato";
+              break;
+            case 2:
+              this.price_level="Moderado";
+              break;
+            case 3:
+              this.price_level="Costoso";
+              break;
+            case 4:
+              this.price_level="Muy caro";
+              break;
+          }
+
+          return {  "position": cus_location,
+                    "name":data.name,
+                    "rating":data.rating,
+                    "place_id":data.place_id,
+                    "price_level": this.price_level,
+                    "pos_origen":latlng,
+                    "photo":data.photo,
+                    "direccion":data.direccion,
+                    "web":data.web,
+                    "tel":data.tel,
+                    "drive":this.URLDrive+"&origin="+latlng.lat+","+latlng.lng+"&destination="+cus_location.lat+","+cus_location.lng+"&travelmode=transit",
+                    "distanciaM":this.distancia
+                  };
+        });
+
+        console.log('bounds',bounds);
+
+        this.places = bounds;
+
+        this.addCluster(bounds);
+ 
+    })  
+  }
+  //actidades custom -fin
+  async nearbysearch(latlng){
+    
+    var request = {
+      location: latlng,
+      radius: '1000',
+      types: ["restaurant","food","bar","cafe"]
+    }
+    
+    await this.googlePlace.nearbySearch(request, results =>{
+      // this.ngZone.run(()=>{
+       
+        console.log('results',results);
+        
+        let POINTS: BaseArrayClass<any> = new BaseArrayClass<any>(results);
+        
+        let bounds: ILatLng[]= POINTS.map((data: any, idx: number) => {
+          console.log('data',data);
+          
+          let cus_location = {
+            lat: data.geometry.location.lat(),
+            lng: data.geometry.location.lng()
+          }
+          debugger
+          let metrs= Math.round(Spherical.computeDistanceBetween(latlng,cus_location));
+          if(metrs >= 1000 )
+          {
+            let k = metrs*0.001;
+            this.distancia = k+" Km"
+          }else this.distancia=metrs+" m";
+
+          console.log("distancia metros",this.distancia);
+          
+          if(data.photos) this.photo = data.photos[0].getUrl();
+          let a =Math.floor(Math.random() * 4) + 0  ;
+          switch(a){
+            case 0:
+              this.price_level="Gratis";
+              break;
+            case 1:
+              this.price_level="Barato";
+              break;
+            case 2:
+              this.price_level="Moderado";
+              break;
+            case 3:
+              this.price_level="Costoso";
+              break;
+            case 4:
+              this.price_level="Muy caro";
+              break;
+          }
+
+          return {  "position": cus_location,
+                    "name":data.name,
+                    // "imagen": data.icon,
+                    "rating":data.rating,
+                    "place_id":data.place_id,
+                    "price_level": this.price_level,
+                    "pos_origen":latlng,
+                    "photo":this.photo,
+                    "direccion":data.vicinity,
+                    "web":this.web,
+                    "tel":this.tel,
+                    "drive":this.URLDrive+"&origin="+latlng.lat+","+latlng.lng+"&destination="+cus_location.lat+","+cus_location.lng+"&travelmode=transit",
+                    "distanciaM":this.distancia
+                  };
+        });
+
+        console.log('bounds',bounds);
+        this.places = bounds;
+
+        this.addCluster(bounds);
+        
+      // });
+    })
+
+  }
+  async detalleLugar(placeId){
+
+    this.googlePlace.getDetails({placeId: placeId}, resultsDetalle=>{
+      console.log('resultsDetalle',resultsDetalle);
+      return resultsDetalle;
+    })
+    return null;
+  }
+  
+  async addCluster(data) {
+
+    this.markerCluster= this.map.addMarkerClusterSync({
+      markers: data,
+      icons: [
+        {
+          min: 3,
+          max: 9,
+          url: "./assets/markercluster/small.png",
+          label: {
+            color: "white"
+          }
+        },
+        {
+          min: 10,
+          url: "./assets/markercluster/large.png",
+          label: {
+            color: "white"
+          }
+        }
+      ]
+    });
+
+
+    this.markerCluster.on(GoogleMapsEvent.MARKER_CLICK).subscribe((params) => {
+      let marker: Marker = params[1];
+      // let icon2 : MarkerIcon ={
+      //   'url': marker.get("imagen"),
+      //   'size': {
+      //     width: 25,
+      //     height: 25
+      //   }
+      // };
+      // marker.setIcon(icon2);
+      marker.setTitle(marker.get("name")+"  "+ marker.get("distanciaM"));
+      marker.setSnippet(marker.get("direccion"));
+      marker.showInfoWindow();
       
     });
+
   }
-  
-  getUserLocation() {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      // this.getGeoLocation(resp.coords.latitude, resp.coords.longitude)
-      if (this.platform.is('cordova')) {
-        let options: NativeGeocoderOptions = {
-          useLocale: true,
-          maxResults: 5
-        };
-        this.nativeGeocoder.reverseGeocode(resp.coords.latitude, resp.coords.longitude, options)
-          .then((result: any) => {
-            console.log(result)
-            this.userLocation = result[0]
-            console.log(this.userLocation)
-          })
-          .catch((error: any) => console.log(error));
-      } else {
-        this.getGeoLocation(resp.coords.latitude, resp.coords.longitude);
-        this.displayGoogleMap(resp.coords.latitude, resp.coords.longitude);
-        console.log('rey1',resp.coords.latitude);
-        console.log(resp.coords.longitude);
-      }
-    }).catch((error) => {
+
+  goReceiver(){
+    debugger;
+    this.pasajeObjService.sendListSource(this.places);
+    this.router.navigate(['/map-lista']);
+  }
+
+  async searchFilter () {
+    const modal = await this.modalCtrl.create({
+      component: SearchFilterPage
     });
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
-      let options: NativeGeocoderOptions = {
-        useLocale: true,
-        maxResults: 5
-      };
-      if (this.platform.is('cordova')) {
-        let options: NativeGeocoderOptions = {
-          useLocale: true,
-          maxResults: 5
-        };
-        this.nativeGeocoder.reverseGeocode(data.coords.latitude, data.coords.longitude, options)
-          .then((result: NativeGeocoderResult[]) => {
-            console.log(result)
-            this.userLocation = result[0]
-            console.log(this.userLocation)
-          })
-          .catch((error: any) => console.log(error));
-      } else {
-        console.log('not cordove');
-        this.getGeoLocation(data.coords.latitude, data.coords.longitude);
-        this.displayGoogleMap(data.coords.latitude, data.coords.longitude);
-        console.log(data.coords.latitude);
-        console.log(data.coords.longitude);
-      }
-    });
+    return await modal.present();
   }
-
-  displayGoogleMap(lat: number, lng: number) {
-    const latLng = new google.maps.LatLng(lat, lng);
-
-    const mapOptions = {
-      center: latLng,
-      disableDefaultUI: true,
-      zoom: 14,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    this.map = new google.maps.Map(document.getElementById('map') , mapOptions);
-
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: latLng,
-      title: 'Usted esta aquí!'
-    });
-    this.getRestaurants(latLng).then((results : Array<any>)=>{
-      this.places = results;
-      console.log(this.places);
-      for(let i = 0 ;i < results.length ; i++)
-      {
-          this.createMarker(results[i]);
-      }
-    },(status)=>console.log(status));
-
-    this.addMarker();
-  }
-
-  async getGeoLocation(lat: number, lng: number, type?) {
-    if (navigator.geolocation) {
-      let geocoder = await new google.maps.Geocoder();
-      let latlng = await new google.maps.LatLng(lat, lng);
-      let request = { latLng: latlng };
-
-      await geocoder.geocode(request, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          let result = results[0];
-          this.zone.run(() => {
-            if (result != null) {
-              this.userCity = result.formatted_address;
-              if (type === 'reverseGeocode') {
-                this.latLngResult = result.formatted_address;
-                console.log(this.latLngResult);
-              }
-            }
-          })
-        }
-      });
-    }
-  }
-  getRestaurants(latLng){
-    var service = new google.maps.places.PlacesService(this.map);
-    let request = {
-        location : latLng,
-        radius : 800 ,
-        types: ["tourist_attraction","zoo", "stadium"]
-    };
-    return new Promise((resolve,reject)=>{
-        service.nearbySearch(request,function(results,status){
-            if(status === google.maps.places.PlacesServiceStatus.OK)
-            {
-                resolve(results);    
-            }else
-            {
-                reject(status);
-            }
-
-        }); 
-    });
-
-  }
-  createMarker(place){
-    var image = {
-      url: place.icon,
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(20, 20)
-    };
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: place.geometry.location,
-      title: place.name,
-      icon:image
-    });   
-  } 
-  addMarker(){
-
-    let marker = new google.maps.Marker({
-    map: this.map,
-    animation: google.maps.Animation.DROP,
-    position: this.map.getCenter()
-    });
-
-    let content = "<p>Tu posición actual !</p>";          
-    let infoWindow = new google.maps.InfoWindow({
-    content: content
-    });
-
-    google.maps.event.addListener(marker, 'click', () => {
-    infoWindow.open(this.map, marker);
-    });
-
-  }
-  // otres
-  reverseGeocode(lat, lng) {
-    if (this.platform.is('cordova')) {
-      let options: NativeGeocoderOptions = {
-        useLocale: true,
-        maxResults: 5
-      };
-      this.nativeGeocoder.reverseGeocode(lat, lng, options)
-        .then((result: NativeGeocoderResult[]) => this.userLocationFromLatLng = result[0])
-        .catch((error: any) => console.log(error));
-    } else {
-      this.getGeoLocation(lat, lng, 'reverseGeocode');
-    }
-  }
-  forwardGeocode(address) {
-    if (this.platform.is('cordova')) {
-      let options: NativeGeocoderOptions = {
-        useLocale: true,
-        maxResults: 5
-      };
-      this.nativeGeocoder.forwardGeocode(address, options)
-        .then((result: NativeGeocoderResult[]) => {
-          this.zone.run(() => {
-            this.lat = result[0].latitude;
-            this.lng = result[0].longitude;
-          })
-        })
-        .catch((error: any) => console.log(error));
-    } else {
-      let geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': address }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          this.zone.run(() => {
-            this.lat = results[0].geometry.location.lat();
-            this.lng = results[0].geometry.location.lng();
-          })
-        } else {
-          alert('Error - ' + results + ' & Status - ' + status)
-        }
-      });
-    }
-  }
-
-
 }
