@@ -72,12 +72,12 @@ export class ActividadService {
     return  this.afs.collection('Actividades').add(actividad);
   }
   updateActividad(actividad: Actividad): void {
-    debugger;
     let idActividad = actividad.id;
     this.actividadDoc = this.afs.doc<Actividad>(`Actividades/${idActividad}`);
     this.actividadDoc.update(actividad);
   }
   deleteActividad(idActividad: string): void {
+    debugger;
     this.actividadDoc = this.afs.doc<Actividad>(`Actividades/${idActividad}`);
     this.actividadDoc.delete();
   }

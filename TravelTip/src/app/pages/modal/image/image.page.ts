@@ -211,7 +211,13 @@ export class ImagePage implements OnInit {
 
 
   }
-
+  cancelarSave(){
+    this.editar=false;
+  }
+  borrarActividad(){
+    this.actividadService.deleteActividad(this.value);
+    this.closeModal();
+  }
   closeModal() {
     this.modalCtrl.dismiss();
   }
