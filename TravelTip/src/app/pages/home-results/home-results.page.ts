@@ -71,14 +71,16 @@ export class HomeResultsPage {
 
   public isInvitado: any = null;
   public isAdmin: any = null;
+  public isUser: any = null;
+  
   public userUid: string = null;
 
   private userAct : Usuario = {};  
 
-  private listaAdmin0: Actividad[];
-  private listaAdmin1: Actividad[];
-  private listaUser0: Actividad[];
-  private listaUser3: Actividad[];
+  private listaAdmin: Actividad[];
+  private listaUser: Actividad[];
+
+  private listaFav: Actividad[];
 
   constructor(
     public navCtrl: NavController,
@@ -111,6 +113,9 @@ export class HomeResultsPage {
         })
         this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
           this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+        })
+        this.authservice.isUserAdmin(this.userUid).subscribe(userRole => {
+          this.isUser = Object.assign({}, userRole.roles).hasOwnProperty('user');
         })
       }
     })
@@ -210,36 +215,68 @@ export class HomeResultsPage {
 
   async ngOnInit() {
     this.loadMap();
-    this.actividadSvr.getAllactividades().subscribe(actividades =>{
-      console.log(actividades);
+        
+    this.listaAct0();
+    this.listaUserAll();
+       
+  }
+  listaActAll(){
+    this.actividadSvr.getAllactividades().subscribe(l=>{
+      this.listaAdmin= l;
+      console.log("lista para adm all",this.listaAdmin);
     });
+  }
+  listaAct0(){
     this.actividadSvr.getAllActividadesCreadas().subscribe( l =>{
-      this.listaAdmin0= l;
-      console.log("lista para adm 0 ",this.listaAdmin0);
+      this.listaAdmin= l;
+      console.log("lista para adm 0 ",this.listaAdmin);
     });
-
+  }
+  listaAct3(){
+    this.actividadSvr.getAllActividadesRechazadas().subscribe( l =>{
+      this.listaAdmin= l;
+      console.log("lista para adm 0 ",this.listaAdmin);
+    });
+  }
+  listaAct1(){
     this.actividadSvr.getAllActividadesOk().subscribe(l=>{
-      this.listaAdmin1= l;
-      console.log("lista para adm 1",this.listaAdmin1);
+      this.listaAdmin= l;
+      console.log("lista para adm 1",this.listaAdmin);
     });
-    debugger;
+  }
+  listaUser0(){
     this.authservice.isAuth().subscribe(auth => {
       if (auth) {
-        this.actividadSvr.getAllActividadesUserCurrentsRechazada(auth.uid).subscribe(l2=>{
-          this.listaUser3= l2;
-          console.log("lista para user 0",this.listaUser3);
-        });
+      debugger
         this.actividadSvr.getAllActividadesUserCurrentsCreadas(auth.uid).subscribe(l2=>{
-          this.listaUser0= l2;
-          console.log("lista para user 3",this.listaUser0);
+          this.listaUser= l2;
+          console.log("lista para user 0",this.listaUser);
         });
       }
     })
-    
-    
-    
   }
-
+  listaUser3(){
+    this.authservice.isAuth().subscribe(auth => {
+      if (auth) {
+      
+        this.actividadSvr.getAllActividadesUserCurrentsRechazada(auth.uid).subscribe(l2=>{
+          this.listaUser= l2;
+          console.log("lista para user 3",this.listaUser);
+        });
+      }
+    })
+  }
+  listaUserAll(){
+    this.authservice.isAuth().subscribe(auth => {
+      if (auth) {
+      
+        this.actividadSvr.getAllActividadesUserCurrents(auth.uid).subscribe(l2=>{
+          this.listaUser= l2;
+          console.log("lista user all",this.listaUser);
+        });
+      }
+    })
+  }
   loadMap() {
     this.geolocation.getCurrentPosition().then((resp) => {
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);

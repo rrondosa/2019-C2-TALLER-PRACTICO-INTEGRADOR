@@ -147,11 +147,31 @@ export class DetallePage implements OnInit {
     this.actividad.drive = this.URLDrive+"&destination="+a+","+b+"&travelmode=transit";
   }
   
-  rechazarActividad() {
+  async rechazarActividad() {
+    const loader = await this.loadingCtrl.create({
+      duration: 2000
+    });
+
+    loader.present();
+
     this.actividad.estado="3";
     this.actividadService.updateActividad(this.actividad);
     this.ok=false;
     console.log("actididad mod  ", this.actividad);
+
+    loader.onWillDismiss().then(async l => {
+      const toast = await this.toastCtrl.create({
+        showCloseButton: true,
+        cssClass: 'bg-profile',
+        message: 'Actividad rechazada',
+        duration: 3000,
+        position: 'middle'
+      });
+      this.ok=false;
+      toast.present();
+      this.closeModal();
+      
+    });
   }
 
   async actidadOk() {
@@ -168,11 +188,12 @@ export class DetallePage implements OnInit {
     this.actividadService.updateActividad(this.actividad);
     console.log("actididad mod  estado 1 ", this.actividad);
     this.ok=true;
+
     loader.onWillDismiss().then(async l => {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,
         cssClass: 'bg-profile',
-        message: 'Se actualizo exitosamente su actividad.',
+        message: 'Actividad confirmada',
         duration: 3000,
         position: 'middle'
       });

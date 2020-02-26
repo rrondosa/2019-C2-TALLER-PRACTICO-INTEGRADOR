@@ -70,15 +70,42 @@
   <!-- <ion-button margin shape="round" expand="full" color="secondary" (click)="searchFilter()">
     Modal 2: Search Filter
   </ion-button> -->
-  
-  <ion-card no-margin class="no-radius">
+  <!-- invitado:{{isInvitado}} <br>
+administrador:{{isAdmin}}<br>
+user:{{isUser}} -->
+<ion-card no-margin class="no-radius" [hidden]="!isInvitado">
+
+    
+  <h3>Sugerencias</h3>
+  <ion-slides class="sel" pager="true">
+    <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
+    <ion-slide center *ngFor="let s of sliderTwo.slidesItems">
+    <!-- <ion-slide center *ngFor="let s of listaAdmin1"> -->
+      <div *ngIf="s.image; else elseImagen">
+        <img class="imgCarrusel" src="{{s.image}}">
+      </div>
+      <ng-template #elseImagen>
+        <img class="imgCarrusel" src="{{imagenURL}}{{publicacion.imagenPortada}}">
+      </ng-template>  
+      <ion-card-content>
+        <h4 style="text-align: left;">Epigto</h4>
+        <hr />
+        <p style="text-align: left;">
+          <strong>Viaje por todo el mundo!</strong>
+        </p>
+      </ion-card-content>
+    </ion-slide>
+  </ion-slides>
+</ion-card>
+
+<ion-card no-margin class="no-radius" [hidden]="!isUser">
 
     
   <h3>Mis favoritos</h3>
   <ion-slides class="sel" pager="true">
     <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
     <!-- <ion-slide center *ngFor="let s of sliderTwo.slidesItems"> -->
-    <ion-slide center *ngFor="let s of listaAdmin1">
+    <ion-slide center *ngFor="let s of listaFav">
       <div *ngIf="s.photo; else elseImagen">
         <img class="imgCarrusel" src="{{s.photo}}">
       </div>
@@ -89,34 +116,30 @@
         <h4 style="text-align: left;">{{s.name}}</h4>
         <hr />
         <p style="text-align: left;">
-          <strong>{{s.direccion}}</strong>
+          <strong>{{s.rating}} estrellas</strong>
         </p>
       </ion-card-content>
     </ion-slide>
   </ion-slides>
 </ion-card>
 
-<ion-card no-margin class="no-radius">
-  <h3>Mis actividades User</h3>
-  <ion-list>
-    <ion-item *ngFor="let s of listaUser0" (click)="presentImage(s.id)" >
-      <!-- {{s.uid_creador}}<br>{{s.estado}} -->
-      <ion-thumbnail slot="start">
-        <img *ngIf="s.photo" src="{{s.photo}}" />
-        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
-      </ion-thumbnail>
-      <ion-label>
-        <h3 ion-text color="primary">{{s.name}}</h3>
-        <p>{{s.direccion}}</p>
-        <p>$ {{s.precio}}</p>
-      </ion-label>
-      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
-    </ion-item>
+<ion-card no-margin class="no-radius" [hidden]="!isUser">
+  
+  <ion-item>
+    <!-- <ion-icon name="pin" slot="start"></ion-icon>
+    <ion-label><h3>Mis actividades User</h3></ion-label> -->
+    <ion-card-title>Mis actividades</ion-card-title>
 
-  </ion-list>
-  rechazados
+    <ion-button fill="outline" slot="end" (click)="listaUserAll()"><ion-icon slot="icon-only" name="clipboard" ></ion-icon></ion-button>
+    <ion-button fill="outline" slot="end" (click)="listaUser0()"><ion-icon slot="icon-only" name="color-wand"   ></ion-icon></ion-button>
+    <ion-button fill="outline" slot="end" (click)="listaUser3()"><ion-icon slot="icon-only" name="close-circle" ></ion-icon></ion-button>
+    
+  </ion-item>
+
   <ion-list>
-    <ion-item *ngFor="let s of listaUser3" (click)="presentImage(s.id)" >
+
+
+    <ion-item *ngFor="let s of listaUser" (click)="presentImage(s.id)"  #elseLista>
       <!-- {{s.uid_creador}}<br>{{s.estado}} -->
       <ion-thumbnail slot="start">
         <img *ngIf="s.photo" src="{{s.photo}}" />
@@ -129,11 +152,24 @@
       </ion-label>
       <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
     </ion-item>
+    
+    
 
   </ion-list>
 </ion-card>
-<ion-card no-margin class="no-radius">
-  <h3>Actividades admin </h3>
+
+<ion-card no-margin class="no-radius" [hidden]="!isAdmin">
+  <ion-item>
+    <!-- <ion-icon name="pin" slot="start"></ion-icon>
+    <ion-label><h3>Mis actividades User</h3></ion-label> -->
+    <ion-card-title>Actividades ABM</ion-card-title>
+
+    <ion-button fill="outline" slot="end" (click)="listaActAll()"><ion-icon slot="icon-only" name="clipboard" ></ion-icon></ion-button>
+    <ion-button fill="outline" slot="end" (click)="listaAct0()"><ion-icon slot="icon-only" name="color-wand"   ></ion-icon></ion-button>
+    <ion-button fill="outline" slot="end" (click)="listaAct3()"><ion-icon slot="icon-only" name="close-circle" ></ion-icon></ion-button>
+    <ion-button fill="outline" slot="end" (click)="listaAct1()"><ion-icon slot="icon-only" name="checkmark-circle-outline" ></ion-icon></ion-button>
+    
+  </ion-item>
   <ion-list>
     <ion-item *ngFor="let s of listaAdmin" (click)="detalleAdm(s.id)" >
       <ion-thumbnail slot="start">
@@ -150,55 +186,7 @@
 
   </ion-list>
 </ion-card>
-<ion-card no-margin class="no-radius">
-  <h3>Actividades ok todas </h3>
-  <ion-list>
-    <ion-item *ngFor="let s of lista1" (click)="detalleAdm(s.id)" >
-      <ion-thumbnail slot="start">
-        <img *ngIf="s.photo" src="{{s.photo}}" />
-        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
-      </ion-thumbnail>
-      <ion-label>
-        <h3 ion-text color="primary">{{s.name}}</h3>
-        <p>{{s.direccion}}</p>
-        <p>$ {{s.precio}}</p>
-      </ion-label>
-      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
-    </ion-item>
 
-  </ion-list>
-</ion-card>
-  <!-- <ion-grid>
-    <h3>Mis actividades</h3>
-    <ion-row>
-      <ion-col size="1">
-        <span class="slider-nav arrow-prev"
-          (click)="slidePrev(sliderTwo,slideWithNav2)">
-          <div class="prev-icon-custom custon-nav"
-            [class.disabled]="sliderTwo.isBeginningSlide"></div>
-        </span>
-        
-      </ion-col>
-      <ion-col size="10">
-
-        <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
-          (ionSlideDidChange)="SlideDidChange(sliderTwo,slideWithNav2)">
-          <ion-slide *ngFor="let s of sliderTwo.slidesItems">
-            <img class="imgCarrusel" src="{{s.image}}">
-          </ion-slide>
-        </ion-slides>
-
-      </ion-col>
-      <ion-col size="1">
-        <span class="slider-nav arrow-next"
-          (click)="slideNext(sliderTwo,slideWithNav2)">
-          <div class="next-icon-custom custon-nav"
-            [class.disabled]="sliderTwo.isEndSlide"></div>
-        </span>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-  
  
   
  

@@ -92,6 +92,22 @@ export class ActividadService {
         });
       }));
   }
+
+  getAllActividadesUserCurrents(userCurrent:string) {
+    debugger; 
+    this.actividadesCollection = this.afs.collection('Actividades', ref =>
+      // ref.where('estado', '==', '3').where('estado','==','0').where('uid_creador','==',userCurrent));
+      ref.where('uid_creador','==',userCurrent));
+    return this.actividades = this.actividadesCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as Actividad;
+          data.id = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
   getAllActividadesUserCurrentsRechazada(userCurrent:string) {
     debugger; 
     this.actividadesCollection = this.afs.collection('Actividades', ref =>

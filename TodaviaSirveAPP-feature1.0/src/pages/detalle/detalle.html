@@ -20,7 +20,7 @@
       <p>{{publicacion.subtitulo}}</p>
     </ion-item>
 
-    <ion-slides class="carrusel" pager="true">
+    <ion-slides class="sel" pager="true">
       <!-- ion-slide center *ngFor="let paso of pasos; index as i"> -->
       <ion-slide center *ngFor="let paso of pasos">
         <div *ngIf="paso.imagen; else elseImagen">
@@ -147,5 +147,18 @@
     </ion-row>
   </ion-grid>
 
+
+  <!-- Lista para administrador  -->
+  <div class = "list">
+    <div class = "item item-avatar">
+       <img src = "my-image.png">
+       <h3>Avatar</h3>
+    </div>
+ 
+    <div class = "item item-thumbnail-left">
+       <img src = "my-image.png">
+       <h3>Thumbnail</h3>
+    </div>
+ </div>
 
 </ion-content>
