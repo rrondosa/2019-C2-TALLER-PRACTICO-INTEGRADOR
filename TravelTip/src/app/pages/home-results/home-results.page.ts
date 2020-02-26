@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
 import {
   NavController,
   AlertController,
@@ -6,7 +6,9 @@ import {
   ToastController,
   PopoverController,
   ModalController,
-  IonSlides } from '@ionic/angular';
+  IonSlides, 
+  Platform,
+  LoadingController} from '@ionic/angular';
 
 // Modals
 import { SearchFilterPage } from '../../pages/modal/search-filter/search-filter.page';
@@ -24,6 +26,8 @@ import { AuthService } from 'src/app/servicios/auth.service';
 import { Usuario } from 'src/app/models/usuario.model';
 import { UserService } from 'src/app/servicios/user.service';
 import { Actividad } from 'src/app/models/actividad.model ';
+import { PasajeObjService } from 'src/app/servicios/pasaje-obj.service';
+import { Router } from '@angular/router';
 
 
 
@@ -45,7 +49,8 @@ export class HomeResultsPage {
   // sliderOne: any;
   sliderTwo: any;
   sliderThree: any;
- 
+  
+  private googleAutocomplete = new google.maps.places.AutocompleteService();
  
  
   //Configuration for each Slider
@@ -65,8 +70,10 @@ export class HomeResultsPage {
   map: any;
   address:string;
 
-  searchKey = '';
-  yourLocation = 'Prueba Calle 123';
+  search = '';
+  public searchResults = new Array<any>();
+
+  yourLocation = 'Florencio Varela 1903, San Justo, Provincia de Buenos Aires, Argentina';
   themeCover = 'assets/img/ionic4-Start-Theme-cover.jpg';
 
   public isInvitado: any = null;
@@ -89,11 +96,17 @@ export class HomeResultsPage {
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
-    public geolocation:Geolocation,
     private nativeGeocoder:NativeGeocoder,
     private actividadSvr:ActividadService,
     private authservice :AuthService,
-    private userService : UserService
+    private userService : UserService,
+    public platform: Platform,
+    public nav: NavController,
+    private loadingCtrl:LoadingController,
+    private ngZone: NgZone,
+    private geolocation: Geolocation,
+    private pasajeObjService: PasajeObjService,
+    private router:Router
   ) {
     //user act
     this.authservice.isAuth().subscribe(auth => {
@@ -413,6 +426,53 @@ export class HomeResultsPage {
       showBackdrop: true
     });
     return await popover.present();
+  }
+
+  searchChanged(){
+    if(!this.search.trim().length) return;
+
+    this.googleAutocomplete.getPlacePredictions({input: this.search}, predictions =>{
+      this.ngZone.run(()=>{
+        this.searchResults = predictions;
+        console.log(predictions);
+        
+      });
+      
+
+    });
+  }
+  async redirecionarMaker(e, result){
+    this.search = '';
+    // this.loading = await this.loadingCtrl.create({
+    //   message: 'Por favor, aguarde...'
+    // });
+    // await this.loading.present();
+    // this.map.clear();
+    // Geocoder.geocode({
+    //   "address": result.description
+    // })
+    // .then((results: GeocoderResult[]) => {
+    //   console.log(results);
+    //   this.loading.dismiss();
+  
+    //   if (results.length > 0) {
+    //     let marker: Marker = this.map.addMarkerSync({
+    //       'position': results[0].position,
+    //       'title':  'Usted esta aquí!',
+    //       'icon': 'blue'
+    //     });
+    //     this.map.animateCamera({
+    //       'target': marker.getPosition(),
+    //       'zoom': 14
+    //     });
+  
+    //     marker.showInfoWindow();
+    //     this.search="";
+    //     this.nearbysearch(results[0].position);
+    //   } else {
+    //     alert("Not found");
+    //   }
+    // });
   }
 
 }

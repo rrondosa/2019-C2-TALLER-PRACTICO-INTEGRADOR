@@ -1,5 +1,5 @@
 export interface Tip {
-    id: number;
+    id: string;
     descripcion: string;
     cant_validaciones: number;
 }

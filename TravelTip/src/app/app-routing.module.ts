@@ -19,6 +19,9 @@ const routes: Routes = [
   { path: 'map-lista', loadChildren: './pages/map-lista/map-lista.module#MapListaPageModule' },
   { path: 'lista-actividades', loadChildren: './pages/admin/lista-actividades/lista-actividades.module#ListaActividadesPageModule' },
   { path: 'maps', loadChildren: './pages/noUser/maps/maps.module#MapsPageModule' },
+  // { path: 'map-favoritos', loadChildren: './peges/map-favoritos/map-favoritos.module#MapFavoritosPageModule' },
+  { path: 'map-favoritos', loadChildren: './pages/map-favoritos/map-favoritos.module#MapFavoritosPageModule' },
+  { path: 'tips', loadChildren: './pages/tips/tips.module#TipsPageModule' },
   // { path: 'tab1', loadChildren: './tab1/tab1.module#Tab1PageModule' },
   // { path: 'tab2', loadChildren: './tab2/tab2.module#Tab2PageModule' }
 ];

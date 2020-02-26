@@ -17,16 +17,18 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="dark">
-    <ion-searchbar [(ngModel)]="searchKey"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="search" placeholder="Para donde?" (ionChange)="searchChanged()"></ion-searchbar>
+    <!-- <ion-searchbar [(ngModel)]="search" placeholder="Para donde?" (ionChange)="searchChanged()"></ion-searchbar> -->
     <ion-buttons slot="end">
-      <!-- <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
+       <!-- <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
         <ion-icon name="options"></ion-icon>
-      </ion-button> -->
+      </ion-button>  -->
       <ion-button [hidden]="isInvitado"  size="small" shape="round" color="medium" (click)="addActividad()">
         <ion-icon name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  
   <!-- <ion-row>
     <ion-col text-start padding-top>
       <ion-title>Google Map</ion-title>
@@ -38,6 +40,13 @@
       </ion-button>
     </ion-col>
   </ion-row> -->
+  <ion-list  [hidden]="!search.length"  class="ion-margin-horizontal" autocomplete> 
+    <ion-item *ngFor="let result of searchResults" (click)="redirecionarMaker($event, result)">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>{{result.description}}</ion-label>
+    </ion-item>
+  </ion-list>
+  
 </ion-header>
 
 <ion-content>

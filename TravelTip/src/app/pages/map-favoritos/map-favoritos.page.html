@@ -1,16 +1,15 @@
 <ion-header>
   <ion-toolbar color="primary">
-
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home-results"></ion-back-button>
      </ion-buttons>
     <ion-title>
         <ion-text color="light">
-          <ion-text color="light" class="fw700">Actividades</ion-text>
+          <ion-text color="light" class="fw700">Favoritos</ion-text>
         </ion-text>
     </ion-title>
-
   </ion-toolbar>
+
   <ion-toolbar color="dark">
     <ion-searchbar [(ngModel)]="search" placeholder="Para donde?" (ionChange)="searchChanged()"></ion-searchbar>
     
