@@ -1,55 +1,44 @@
 <ion-header>
   <ion-toolbar color="primary">
+
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home-results"></ion-back-button>
-    </ion-buttons>
+     </ion-buttons>
     <ion-title>
         <ion-text color="light">
-          <ion-text color="light" class="fw700">Transpote</ion-text>
+          <ion-text color="light" class="fw700">Hoteles transporte</ion-text>
         </ion-text>
     </ion-title>
-    <!-- <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="medium" (click)="notifications()">
-        <ion-icon name="notifications"></ion-icon>
-        <ion-badge color="dark" slot="end">2</ion-badge>
-      </ion-button>
-    </ion-buttons> -->
+
   </ion-toolbar>
-  <!-- <ion-toolbar color="dark">
-    <ion-searchbar [(ngModel)]="searchKey"></ion-searchbar>
+  <ion-toolbar color="dark">
+    <ion-searchbar [(ngModel)]="search" placeholder="Para donde?" (ionChange)="searchChanged()"></ion-searchbar>
+    
     <ion-buttons slot="end">
       <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
         <ion-icon name="options"></ion-icon>
       </ion-button>
+      <ion-button size="small" shape="round" color="medium" (click)="goReceiver()">
+        <ion-icon name="list"></ion-icon>
+      </ion-button>
     </ion-buttons>
-  </ion-toolbar> -->
+  </ion-toolbar>
+
+  <ion-list  [hidden]="!search.length"  class="ion-margin-horizontal" autocomplete> 
+    <ion-item *ngFor="let result of searchResults" (click)="redirecionarMaker($event, result)">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>{{result.description}}</ion-label>
+    </ion-item>
+  </ion-list>
+  
   
 </ion-header>
 
 <ion-content>
 
-  <div #map id="map"></div>
+
   
-  <!-- <ion-list>
-    <ion-item *ngFor="let place of places">
-      <ion-label><p>{{place.name}}</p></ion-label>
-      
-      <div class="rate_div"><rating [rate]="place.rating"  readonly="true" ></rating></div>
-         
-    </ion-item>
-  </ion-list> -->
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button routerLink="/map-transporte" routerDirection="root">
-        <ion-icon name="flash"></ion-icon>
-        <ion-label>Tab one</ion-label>
-      </ion-tab-button>
-    
-      <ion-tab-button routerLink="/map-hotel" routerDirection="root">
-        <ion-icon name="flash"></ion-icon>
-        <ion-label>Tab 2</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-</ion-tabs>
+    <div #map id="map"></div>
   
+
 </ion-content>

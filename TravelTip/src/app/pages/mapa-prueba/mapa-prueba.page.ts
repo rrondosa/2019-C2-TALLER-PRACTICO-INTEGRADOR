@@ -81,7 +81,9 @@ export class MapaPruebaPage implements OnInit {
     private pasajeObjService: PasajeObjService,
     private router:Router,
     public modalCtrl: ModalController
-    ) {console.log(google)}    
+    ) {
+      console.log(google)
+    }    
    
 
   async ngOnInit() {
@@ -209,7 +211,7 @@ export class MapaPruebaPage implements OnInit {
     }
 
     await this.googlePlace.nearbySearch(request, results =>{
-      // this.ngZone.run(()=>{
+      this.ngZone.run(()=>{
        
         console.log('results',results);
         
@@ -273,7 +275,7 @@ export class MapaPruebaPage implements OnInit {
 
         this.addCluster(bounds);
         
-      // });
+      });
     })
 
   }

@@ -93,21 +93,32 @@
     </ion-slide>
   </ion-slides>
 
+  <ion-list>
+    <ion-item *ngFor="let s of listaAdmin" (click)="presentImage(s.id)" >
+      <ion-thumbnail slot="start">
+        <img *ngIf="s.photo" src="{{s.photo}}" />
+        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 ion-text color="primary">{{s.name}}</h3>
+        <p>{{s.direccion}}</p>
+        <p>$ {{s.precio}}</p>
+      </ion-label>
+      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
+    </ion-item>
+  </ion-list>
   
 
-  <ion-grid>
+  <!-- <ion-grid>
     <h3>Mis actividades</h3>
     <ion-row>
       <ion-col size="1">
-        <!-- <span class="slider-nav arrow-prev"
+        <span class="slider-nav arrow-prev"
           (click)="slidePrev(sliderTwo,slideWithNav2)">
           <div class="prev-icon-custom custon-nav"
             [class.disabled]="sliderTwo.isBeginningSlide"></div>
-        </span> -->
-        <span class="slider-nav arrow-prev"
-          (click)="slidePrev(sliderTwo,slideWithNav2)">
-          <ion-icon color="dark" name="chevron-back-outline"></ion-icon> 
-        </span> 
+        </span>
+        
       </ion-col>
       <ion-col size="10">
 
@@ -127,24 +138,12 @@
         </span>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
   
  
-  <ion-list>
-    <ion-item *ngFor="let s of listaAdmin" (click)="presentImage(s.id)" >
-      <ion-thumbnail slot="start">
-        <img *ngIf="s.photo" src="{{s.photo}}" />
-        <img *ngIf="!s.photo" src="assets/img/avatar.png" />
-      </ion-thumbnail>
-      <ion-label>
-        <h3 ion-text color="primary">{{s.name}}</h3>
-        <p>{{s.direccion}}</p>
-        <p>$ {{s.precio}}</p>
-      </ion-label>
-      <ion-icon name="arrow-forward" slot="end" color="primary"></ion-icon>
-    </ion-item>
-  </ion-list>
+  
  
   <popmenu></popmenu>
+  <div #map id="map"></div>
 </ion-content>
   
