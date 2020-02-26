@@ -9,59 +9,173 @@
 </ion-header>
 
 <ion-content>
-  <!-- <img [src]="value"> -->
-
-  <ion-slide center>
-    <ion-card>
-      
-
-      <ion-img style="height: 300px;" [src]="actividad.photo"></ion-img>
+  <ion-card [hidden]="editar">
+    <ion-img style="height: 300px;" [src]="actividad.photo"></ion-img>
       <ion-card-header>
         <ion-card-subtitle>{{actividad.direccion}}</ion-card-subtitle>
         <ion-card-title>{{actividad.name}}  {{actividad.distanciaM}}</ion-card-title>
       </ion-card-header>
-      
-      <ion-card-content>
-        <ion-row>
-          <ion-col col-10><div class="rate_div"><rating [rate]="actividad.rating"  readonly="true" ></rating></div></ion-col>
-          <ion-col col-2>{{actividad.rating}}</ion-col>
-          
-        </ion-row>
-        <ion-row>
-          <ion-col col-2><ion-icon name="call"></ion-icon></ion-col>
-          <ion-col col-10>{{actividad.tel}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2><ion-icon name="link"></ion-icon></ion-col>
-          <ion-col col-10><a href="{{actividad.web}}">Ir su web</a></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2><ion-icon name="navigate"></ion-icon></ion-col>
-          <ion-col col-10><a href="{{actividad.drive}}">Como llegar ...</a></ion-col>
-        </ion-row>
-        <ion-row>
-          
-         
-        </ion-row>
-        <ion-grid class="btn-group">
-          
-          <ion-row>
-            
-            <ion-col size="6">
-              <ion-button shape="round" expand="full" color="secondary" (click)="onLoginInvitado()">
-                <ion-icon slot="icon-only" name="logo-twitter"></ion-icon>
-                <ion-icon slot="icon-only" name="exit"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col size="6">
-              <ion-button shape="round" expand="full" color="secondary">
-                <ion-icon slot="icon-only" name="logo-googleplus"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+      <ion-item>
+        <div class="rate_div"><rating [rate]="actividad.rating"  readonly="true" ></rating></div>
+        <!-- <ion-label>{{actividad.rating}} estrellas</ion-label> -->
+      </ion-item>
+      <ion-item>
+        <ion-icon name="pin" slot="start"></ion-icon>
+        <ion-button fill="outline" slot="end" href="{{actividad.drive}}" color="primary">Ir</ion-button>
+        <ion-label>{{actividad.direccion}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="call" slot="start"></ion-icon>
+        <!-- <ion-button fill="outline" slot="end" href="{{actividad.drive}}" shape="round"color="secondary">Ir ..</ion-button> -->
+        <ion-label>{{actividad.tel}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="globe" slot="start"></ion-icon>
+        <!-- <ion-button fill="outline" slot="end" href="{{actividad.drive}}" shape="round"color="secondary">Ir ..</ion-button> -->
+        <ion-label><a href="{{actividad.web}}">Ir su web</a></ion-label>
+      </ion-item>
 
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
+      
+  </ion-card>
+
+<!-- formulario par editra la actividad para user -->
+  <ion-card [hidden]="!editar" padding>
+    <ion-card-content class="perfil">
+		
+      <label for="file-input">
+      <ion-img *ngIf="actividad.photo" src="{{actividad.photo}}" id="imgPerfil" style="height: 300px;"> </ion-img>
+      <img *ngIf="!actividad.photo" src="assets/img/avatar.png" />
+      </label>
+      <input  id="file-input" type="file" accept="image/*" (change)="onFileChanged($event)"  />
+    <p color="light" class="fw100">(toca sobre la imagen para editar)</p>
+     
+    
+    <ion-button icon-left color="secondary" (click)="takePicture()" >
+      <ion-icon name="camera"></ion-icon> 
+      Tomar foto
+    </ion-button>
+    </ion-card-content>
+    <ion-item no-padding class="animated fadeInUp">
+      <ion-label position="floating">
+      Nombre
+      </ion-label>
+      <ion-input inputmode="text"   [(ngModel)]="actividad.name"></ion-input>
+    </ion-item>
+    
+    <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="floating">
+      Calificación
+    </ion-label><br/>
+    <rating [(ngModel)]="actividad.rating"    readonly="false" size="default" (ngModelChange)="onRateChange($event)"> </rating>
+  </ion-item>
+    
+
+    <ion-item  no-padding class="animated fadeInUp">
+      <ion-label>Tipo actividad</ion-label>
+      <ion-select [(ngModel)]="tipoAct"  
+        multiple="false" placeholder="Elije un opción..."
+        [selectedText]="tipoAct ? tipoAct.toString() : tipoAct"
+        (ionChange)="codeSelected($event)" required >
+          
+          <ion-select-option [value]="H">Hospedaje</ion-select-option>
+          <ion-select-option [value]="E">Excursión</ion-select-option>
+          <ion-select-option [value]="T">Transporte</ion-select-option>
+          <ion-select-option [value]="G">Gastronomía</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="tipoAct=='Hospedaje'" no-padding class="animated fadeInUp">
+      <ion-label>Cant. personas</ion-label>
+      <ion-select [(ngModel)]="amb"  
+        multiple="false" placeholder="Elije un opción..."
+        [selectedText]="amb ? amb.toString() : amb"
+        (ionChange)="codeSelectedAmb($event)" required >
+          
+          <ion-select-option [value]="2">2 personas</ion-select-option>
+          <ion-select-option [value]="4">4 personas</ion-select-option>
+          <ion-select-option [value]="6">6 personas</ion-select-option>
+      </ion-select>
+      
+      
+    </ion-item>
+    <ion-item *ngIf="tipoAct=='Excursión' || tipoAct=='Gastronomía'" no-padding class="animated fadeInUp">
+        <ion-label position="floating">
+        Descripción
+        </ion-label>
+        <ion-input inputmode="text"  [(ngModel)]="actividad.tipo.actividad"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tipoAct=='Gastronomía'" no-padding class="animated fadeInUp">
+        <ion-label position="floating">
+        Descripción
+        </ion-label>
+        <ion-input inputmode="text"  [(ngModel)]="actividad.tipo.gastronomia"></ion-input>     
+    </ion-item>
+    <ion-item *ngIf="tipoAct=='Transporte'" no-padding class="animated fadeInUp">
+        <ion-label position="floating">
+        Patente
+        </ion-label>
+        <ion-input inputmode="text"  [(ngModel)]="actividad.tipo.transporte"></ion-input>
+    </ion-item>
+
+    <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="floating">
+      <ion-icon name="logo-usd" item-start></ion-icon>
+      Precio
+    </ion-label>
+    <ion-input type="number"   [(ngModel)]="actividad.precio" required></ion-input>
+    </ion-item>
+    
+
+    <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="floating">
+      <ion-icon name="call" item-start></ion-icon>
+      Teléfono
+    </ion-label>
+    <ion-input type="text"   [(ngModel)]="actividad.tel" required></ion-input>
+    </ion-item>
+
+
+    <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="floating">
+      Página web
+    </ion-label>
+    <ion-input  inputmode="text"   [(ngModel)]="actividad.web" required></ion-input>
+    </ion-item>
+
+    
+    <ion-item no-padding class="animated fadeInUp">
+      <ion-label position="floating">
+      <!-- <ion-icon name="direccion" item-start></ion-icon> -->
+      Direccion
+      </ion-label>
+      <ion-input inputmode="text" [(ngModel)]="actividad.direccion"></ion-input>
+
+    </ion-item>
+    <ion-searchbar [(ngModel)]="search" placeholder="Ingrese la direccion" (ionChange)="searchChanged()"></ion-searchbar>
+    <ion-list  [hidden]="!search.length"  class="ion-margin-horizontal" autocomplete> 
+    <ion-item *ngFor="let result of searchResults" (click)="selcionarDire($event, result)">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>{{result.description}}</ion-label>
+    </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-grid class="btn-group">
+          
+    <ion-row>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="primary" (click)="editarActividad()">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="primary" (click)="saveActividad()">
+          <ion-icon slot="icon-only" name="save"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" expand="full" color="danger">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

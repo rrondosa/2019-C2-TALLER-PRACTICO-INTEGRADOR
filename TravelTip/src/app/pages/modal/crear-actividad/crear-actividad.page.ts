@@ -15,7 +15,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 import * as firebase from 'firebase';
 import { storage, initializeApp, apps, auth } from 'firebase';
-import { Geocoder, GeocoderResult } from '@ionic-native/google-maps';
 
 declare var google:any;
 
@@ -40,7 +39,6 @@ export class CrearActividadPage implements OnInit {
   public position;
 
   private googleAutocomplete = new google.maps.places.AutocompleteService();
-  private googleGeocode= new google.maps.Geocoder;
   public search: string ="";
   public searchResults = new Array<any>();
 
@@ -62,15 +60,11 @@ export class CrearActividadPage implements OnInit {
     private modalCtrl: ModalController,
     private ngZone: NgZone,
     public loadingCtrl: LoadingController,
-    private formBuilder: FormBuilder,
-    private auth : AuthService,
-    private router : Router,
     public toastCtrl: ToastController,
     private authservice :AuthService,
     private userService : UserService,
     private actividadService:ActividadService,
     private firebaseStorage:AngularFireStorage,
-    private firebase : AngularFireAuth,
     private camera: Camera,
     private alertCtrl: AlertController,
   ) { 
@@ -126,19 +120,7 @@ export class CrearActividadPage implements OnInit {
   selcionarDire(e, result){
     this.direccion=result.description;
     console.log(this.direccion);
-    this.googleGeocode.geocode({address: this.direccion}, result=>{
-      debugger;
-      this.ngZone.run(()=>{
-        console.log(result);
-        let a=result[0].geometry.location.location.lat();
-        this.position={
-          lat:a,
-          lng:a
-
-        }
-        console.log(this.position);
-      });
-    });
+    
     this.search = "";
     
   }

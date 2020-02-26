@@ -65,7 +65,7 @@
 				</ion-select>
 		  </ion-item>
 		  <ion-item *ngIf="tipoAct=='Hospedaje'" no-padding class="animated fadeInUp">
-			  <ion-label>Cant. amb.</ion-label>
+			  <ion-label>Cant. personas</ion-label>
 			  <ion-select [(ngModel)]="amb"  
 				  multiple="false" placeholder="Elije un opción..."
 				  [selectedText]="amb ? amb.toString() : amb"
@@ -84,7 +84,7 @@
 					<!-- <ion-icon name="direccion" item-start></ion-icon> -->
 					Descripción
 				  </ion-label>
-				  <ion-input inputmode="text"  [(ngModel)]="description"></ion-input>
+				  <ion-input inputmode="text"  [(ngModel)]="actividad.tipo.e"></ion-input>
 			  </ion-item>
 				
 			  
